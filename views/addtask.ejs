@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Add Event</title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <%- include('partials/navbar') %>
+    <div class="page-wrapper">
+      <h1>Add a New Event</h1>
+      <h2>Fill in the form below to add a new event:</h2>
+      <form method="POST" action="/tasks/taskadded">
+        
+        <!-- Event Title -->
+        <p>Event Title: 
+          <input id="title" type="text" name="title" class="input-field" required />
+        </p>
+        
+        <!-- Event Description -->
+        <p>Description: 
+          <textarea id="description" name="description" rows="6" cols="60" class="input-field" required></textarea>
+        </p>
+        
+        <!-- Event Date and Time -->
+        <p>Event Date and Time: 
+          <input id="due_date" type="datetime-local" name="due_date" class="input-field" required />
+        </p>
+      
+        <!-- Priority Level -->
+        <p>Priority Level:
+          <select id="priority_level" name="priority_level" class="input-field" required>
+            <option value="Green">Low (Green)</option>
+            <option value="Orange">Medium (Orange)</option>
+            <option value="Red">High (Red)</option>
+          </select>
+        </p>
+      
+        <input type="submit" value="Add Event" class="submit-btn" />
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Login Successful</title>
+  <link rel="stylesheet" type="text/css" href="/main.css"/>
+</head>
+<body>
+     <%- include('partials/navbar') %>
+  <div class="page-wrapper">
+    <h1>Login was successful!</h1>
+    <h2>Hello <%= user.first_name %> <%= user.last_name %> - Your Own Personal Event Manager</h2>
+    /br
+    <p><a href="/tasks/addtask" class="button primary">Create Events</a></p>
+  </div>
+</body>
+</html>

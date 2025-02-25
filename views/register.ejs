@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Sign Up to Use PlanIT</title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <div class="signup-wrapper">
+      <div class="page-wrapper">
+        <h1>Sign up for PlanIT</h1>
+        <h2>Enter Your Information Below</h2>
+
+        <!-- Sign Up Form -->
+        <form method="POST" action="registered" class="signup-form">
+          <p>First Name: <input id="first" type="text" name="first" required /></p>
+          <p>Last Name: <input id="last" type="text" name="last" required /></p>
+          <p>Email: <input id="email" type="email" name="email" required /></p>
+          <p>Username: <input id="username" type="text" name="username" required /></p>
+          <p>Password: <input id="password" type="password" name="password" required /></p>
+          
+          <!-- Submit Button -->
+          <input type="submit" value="Register" class="button primary" />
+        </form>
+
+        <!-- Login Redirect -->
+        <div class="login-prompt">
+          <p>Already have an account? <a href="/users/login" class="button secondary">Login</a></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

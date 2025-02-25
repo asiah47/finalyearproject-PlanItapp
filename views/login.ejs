@@ -1,0 +1,26 @@
+<!doctype html>
+<html class="login-page">
+  <head>
+    <title>Login - Welcome to PlanIT</title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <div class="login-wrapper">
+      <div class="page-wrapper">
+        <h1>Welcome to PlanIT</h1>
+        
+        <!-- Login Form -->
+        <form method="POST" action="loggedin" class="login-form">
+          <p>Username: <input id="username" type="text" name="username" required /></p>
+          <p>Password: <input id="password" type="password" name="password" required /></p>
+          <input type="submit" value="Login" class="button primary" />
+        </form>
+
+        <!-- Sign Up Prompt -->
+        <div class="signup-prompt">
+          <p>Haven't signed up yet? <a href="/users/register" class="button secondary">Sign Up</a></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
