@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Guest</title>
+  <link rel="stylesheet" href="/main.css">
+  <link rel="stylesheet" href="/guest.css">
+</head>
+<body>
+  <div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <%- include('partials/sidebar', { eventId: eventId }) %>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <h1>Edit Guest: <%= guest.guest_name %></h1>
+
+      <form action="/guests/<%= eventId %>/edit/<%= guest.guest_id %>" method="POST">
+        <label for="guest_name">Guest Name:</label>
+        <input type="text" id="guest_name" name="guest_name" value="<%= guest.guest_name %>" required>
+
+        <label for="guest_email">Guest Email:</label>
+        <input type="email" id="guest_email" name="guest_email" value="<%= guest.guest_email %>" required>
+
+        <label for="rsvp_status">RSVP Status:</label>
+        <select id="rsvp_status" name="rsvp_status">
+          <option value="maybe" <%= guest.rsvp_status === 'maybe' ? 'selected' : '' %>>Maybe</option>
+          <option value="yes" <%= guest.rsvp_status === 'yes' ? 'selected' : '' %>>Yes</option>
+          <option value="no" <%= guest.rsvp_status === 'no' ? 'selected' : '' %>>No</option>
+        </select>
+
+        <button type="submit">Save Changes</button>
+      </form>
+    </div>
+
+  </div>
+</body>
+</html>

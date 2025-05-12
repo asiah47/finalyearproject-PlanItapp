@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= event.event_name %> - Dashboard</title>
+
+  <link rel="stylesheet" href="/main.css">
+  <link rel="stylesheet" href="/dashboard.css">
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+</head>
+<body>
+  <div class="dashboard-container">
+
+    <%- include('partials/sidebar', { eventId: eventId }) %>
+
+
+    <div class="main-content">
+      <h1><%= event.event_name %> Dashboard</h1>
+
+      <%- include('partials/topbar') %>
+
+      <!-- Top Row: Status + Countdown -->
+      <div class="top-row">
+        <div class="status-bar">
+          <span class="status-label">Status:</span> Planning in Progress
+        </div>
+        <div class="event-dates">
+          <p>Event Date: <%= event.event_date.toDateString() %></p>
+          <div class="countdown" id="countdown"></div>
+        </div>
+      </div>
+
+      <!-- Grid Layout -->
+      <div class="dashboard-grid">
+        <!-- Left Column -->
+        <div class="left-column">
+          <!-- Tasks Preview -->
+          <div class="card">
+            <h3>Tasks Overview</h3>
+            <div class="task-item">
+              <div class="task-status success"></div>
+              <span>Confirm venue booking</span>
+            </div>
+            <div class="task-item">
+              <div class="task-status warning"></div>
+              <span>Send out invites</span>
+            </div>
+            <div class="task-item">
+              <div class="task-status danger"></div>
+              <span>Finalise menu</span>
+            </div>
+            <a href="/tasks/<%= event.event_id %>">View All Tasks</a>
+          </div>
+
+          <!-- Budget Donut Chart -->
+          <div class="card">
+            <h3>Budget Overview</h3>
+            <canvas id="budgetChart"></canvas>
+            <a href="/budget/<%= event.event_id %>">View Full Budget</a>
+          </div>
+
+          <!-- Checklist Summary -->
+          <div class="card">
+            <h3>Checklist</h3>
+            <div class="checklist-item">
+              <input type="checkbox" checked> Book Photographer
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox"> Confirm Guest List
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox"> Choose Decorations
+            </div>
+            <a href="/tasks/<%= event.event_id %>">View Checklist</a>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+        <!-- Calendar Widget -->
+        <div class="card">
+          <h3>Calendar</h3>
+
+          <% var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; %>
+
+        <!-- Calendar header with navigation -->
+        <div class="calendar-header">
+          <a href="?month=<%= prevMonth %>&year=<%= prevYear %>">⬅️</a>
+          <span><%= monthNames[eventMonth] %> <%= eventYear %></span>
+          <a href="?month=<%= nextMonth %>&year=<%= nextYear %>">➡️</a>
+        </div>
+
+        <div class="calendar">
+          <% 
+            var firstDay = new Date(eventYear, eventMonth, 1).getDay(); 
+            var daysInMonth = new Date(eventYear, eventMonth + 1, 0).getDate();
+          %>
+
+          <!-- Weekday headers -->
+          <div class="calendar-day">S</div>
+          <div class="calendar-day">M</div>
+          <div class="calendar-day">T</div>
+          <div class="calendar-day">W</div>
+          <div class="calendar-day">T</div>
+          <div class="calendar-day">F</div>
+          <div class="calendar-day">S</div>
+
+          <!-- Blank spaces -->
+          <% for (let blank = 0; blank < firstDay; blank++) { %>
+            <div class="calendar-day"></div>
+          <% } %>
+
+          <!-- Days of the month -->
+          <% for (let day = 1; day <= daysInMonth; day++) { %>
+            <div class="calendar-day <%= (day === event.event_date.getDate() && eventMonth === event.event_date.getMonth() && eventYear === event.event_date.getFullYear()) ? 'event-day' : '' %>">
+              <%= day %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Guest RSVP Summary -->
+      <div class="card">
+        <h3>Guest Summary</h3>
+
+        <% if (guestSummary) { %>
+          <p>Total Guests: <%= guestSummary.total || 0 %></p>
+          <p>Yes: <%= guestSummary.confirmed || 0 %> | No: <%= guestSummary.declined || 0 %> | Maybe: <%= guestSummary.maybe || 0 %></p>
+        <% } else { %>
+          <p>No guest data available.</p>
+        <% } %>
+
+        <a href="/guests/<%= event.event_id %>">Manage Guests</a>
+      </div>
+
+
+      
+          <!-- Key Milestones Widget -->
+          <div class="card">
+            <h3>Key Milestones</h3>
+            <div class="milestone-item">
+              <span class="milestone-date">May 1</span>
+              <span>Send Invitations</span>
+            </div>
+            <div class="milestone-item">
+              <span class="milestone-date">June 10</span>
+              <span>Finalise Menu</span>
+            </div>
+            <div class="milestone-item">
+              <span class="milestone-date">June 25</span>
+              <span>Confirm Guest List</span>
+            </div>
+            <a href="/tasks/<%= event.event_id %>">View Timeline</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Countdown Timer
+  const eventDate = new Date('<%= event.event_date.toISOString() %>');
+  function updateCountdown() {
+    const now = new Date();
+    const timeLeft = eventDate - now;
+    const countdownEl = document.getElementById('countdown');
+    if (timeLeft <= 0) {
+      countdownEl.innerText = 'Event has started!';
+      return;
+    }
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+    const seconds = Math.floor((timeLeft / 1000) % 60);
+    countdownEl.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s left`;
+  }
+  updateCountdown(); 
+  setInterval(updateCountdown, 1000);
+
+  // Budget Donut Chart
+  const ctx = document.getElementById('budgetChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Spent', 'Remaining'],
+      datasets: [{
+        data: [60, 40], 
+        backgroundColor: ['#8CA88F', '#D9CAB3']
+      }]
+    },
+    options: {
+      cutout: '70%',
+      plugins: { legend: { display: false } }
+    }
+  });
+</script>
+</body>
+</html>

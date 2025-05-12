@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/task.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Task: <%= task.task_name %></h1>
+
+        <form action="/tasks/<%= eventId %>/edit/<%= task.task_id %>" method="POST">
+            <label for="task_name">Task Name:</label>
+            <input type="text" id="task_name" name="task_name" value="<%= task.task_name %>" required>
+
+            <label for="task_description">Task Description:</label>
+            <textarea id="task_description" name="task_description"><%= task.task_description %></textarea>
+
+            <label for="due_date">Due Date:</label>
+            <input type="datetime-local" id="due_date" name="due_date" value="<%= task.due_date ? task.due_date.toISOString().slice(0,16) : '' %>">
+
+            <label for="status">Status:</label>
+            <select id="status" name="status">
+                <option value="pending" <%= task.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                <option value="in-progress" <%= task.status === 'in-progress' ? 'selected' : '' %>>In-Progress</option>
+                <option value="completed" <%= task.status === 'completed' ? 'selected' : '' %>>Completed</option>
+            </select>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>

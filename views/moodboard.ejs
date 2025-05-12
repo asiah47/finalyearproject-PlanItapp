@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodboard</title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/moodboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+</head>
+<body>
+  <div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <%- include('partials/sidebar', { eventId: eventId }) %>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <h1>Moodboard for Event: <%= eventId %></h1>
+
+      <!-- Floating Upload Button -->
+      <form action="/moodboard/<%= eventId %>/upload" method="POST" enctype="multipart/form-data" id="uploadForm">
+        <input type="file" name="theme_image" id="imageInput" accept="image/*" hidden>
+        <button type="button" id="uploadButton">+ Upload Image</button>
+      </form>
+
+      <!-- Moodboard Gallery -->
+      <div id="moodboard" class="moodboard-gallery">
+        <% themes.forEach(theme => { %>
+          <% if (theme.theme_image) { %>
+            <div class="moodboard-item">
+              <img src="/uploads/moodboard/<%= theme.theme_image %>" alt="Moodboard Image">
+            </div>
+          <% } %>
+        <% }) %>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+
+    // Button
+    const uploadButton = document.getElementById('uploadButton');
+    const imageInput = document.getElementById('imageInput');
+
+    uploadButton.addEventListener('click', () => {
+      imageInput.click();
+    });
+
+    imageInput.addEventListener('change', () => {
+      document.getElementById('uploadForm').submit();
+    });
+
+    // SortableJS - DRAG AND DROP 
+    new Sortable(document.getElementById('moodboard'), {
+      animation: 150
+    });
+  </script>
+</body>
+</html>

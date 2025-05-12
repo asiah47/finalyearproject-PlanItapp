@@ -1,273 +1,101 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-
-/* Global Reset */
-* {
+/* ========== MAIN ========== */
+:root {
+    --primary-color: #F4D9D6; 
+    --accent-color: #A8D0E6;   
+    --text-color: #333333;     
+    --muted-text-color: #7A7A7A; 
+    --background-color: #FFFFFF; 
+    --shadow-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  body {
+    font-family: 'IBM Plex Sans', 'Inter', sans-serif;
+    background: url('/images/background.png') center/cover no-repeat fixed;
+    color: var(--text-color);
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-/* Body Styling */
-body {
-    font-family: 'Montserrat', sans-serif; /* Changed font */
-    background-color: #222f3e; /* Dark background */
-    color: #f7f7f7; /* Light text color */
+  }
+  
+ 
+  .dashboard-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-}
+    max-width: 1800px;
+    min-height: 90vh;
+    margin: 40px auto;
+    background-color: var(--background-color);
+    border-radius: 30px;
+    box-shadow: 0 12px 32px var(--shadow-color);
+    overflow: hidden;
+  }
+  
 
-/* Page Wrapper Styles */
-.page-wrapper {
-    background-color: #1e2a33; /* Darker background for the card */
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    max-width: 800px; /* Increased width for better spacing */
-    width: 100%;
-    padding: 40px;
-    text-align: center;
-}
-
-/* Heading Styles */
-h1 {
-    font-size: 2.8rem;
-    font-weight: 700;
-    color: #1abc9c; /* Fresh green color */
-    margin-bottom: 30px;
-    font-family: 'Montserrat', sans-serif;
-}
-
-h2 {
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: #ecf0f1; /* Lighter text for subtitle */
-    margin-bottom: 20px;
-}
-
-/* Features List Styling */
-ul.features-list {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 30px;
-    font-size: 1.2rem;
-}
-
-ul.features-list li {
-    color: #f7f7f7; /* Light text for feature items */
-    margin-bottom: 10px;
-    font-weight: 400;
-}
-
-/* Form Styling (Not used directly in this page, but needed for future forms) */
-form {
+  .sidebar {
+    width: 240px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
     display: flex;
     flex-direction: column;
-    gap: 15px;
-}
-
-input[type="text"], input[type="password"], input[type="email"] {
-    padding: 12px;
-    font-size: 1.1rem;
-    border-radius: 8px;
-    border: 2px solid #1abc9c;
-    background-color: #34495e;
-    color: #f7f7f7;
-    width: 100%;
-}
-
-input[type="submit"] {
-    background-color: #1abc9c;
-    color: white;
-    padding: 14px;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
-}
-
-input[type="submit"]:hover {
-    background-color: #16a085;
-}
-
-/* CTA Button */
-.cta-button {
-    margin-top: 30px;
-}
-
-a.button.primary {
-    background-color: #1abc9c;
-    color: white;
-    padding: 15px 30px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-}
-
-a.button.primary:hover {
-    background-color: #16a085;
-}
-
-
-/* Secondary Button Styling */
-.button.secondary {
-    background-color: transparent;
-    color: #1abc9c; /* Green text color */
-    padding: 14px;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    width: 100%;
-    max-width: 300px; /* Optional: Limit the maximum width */
-    text-align: center; /* Center-align the text */
-}
-
-.button.secondary:hover {
-    background-color: #1abc9c; /* Green background on hover */
-    color: white; /* White text when hovered */
-}
-
-
-/* Navbar Styling */
-.navbar {
-    background-color: #1e2a33; /* Same dark color as page wrapper */
-    color: #f7f7f7;
-    padding: 15px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.navbar .logo {
+    padding: 40px 20px;
+  }
+  
+  .sidebar h2 {
     font-size: 1.8rem;
-    font-weight: 600;
-    color: #f7f7f7;
+    margin-bottom: 50px;
+    color: var(--text-color);
+  }
+  
+  .sidebar a {
+    color: var(--text-color);
     text-decoration: none;
-}
+    margin: 12px 0;
+    padding: 12px 16px;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+  }
+  
+  .sidebar a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
 
-.navbar ul {
-    list-style: none;
-    display: flex;
-    gap: 25px;
-}
-
-.navbar li a {
-    color: #f7f7f7;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.navbar li a:hover {
-    color: #1abc9c; /* Green hover effect */
-}
-
-/* Footer Styling */
-.footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #1e2a33;
-    color: #f7f7f7;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    font-size: 0.9rem;
-}
-
-/* Smooth Scrolling */
-html {
-    scroll-behavior: smooth;
-}
-
-
-
-/* Styling for Input Fields (Text, Textarea, Date, Select) */
-.input-field {
-    padding: 12px;
-    font-size: 1.1rem;
-    border-radius: 8px;
-    border: 2px solid #1abc9c; /* Green border */
-    background-color: #34495e; /* Dark input background */
-    color: #f7f7f7; /* Light text inside inputs */
-    width: 100%;
-    margin: 10px 0;
-}
-
-.input-field:focus {
-    outline: none;
-    border-color: #16a085; /* Slightly lighter green on focus */
-}
-
-/* Styling for Submit Button */
-.submit-btn {
-    background-color: #1abc9c;
-    color: white;
-    padding: 14px;
-    border-radius: 8px;
-    font-size: 1.2rem;
+  h1, h2, h3 {
     font-weight: 600;
+    color: var(--text-color);
+  }
+  
+
+  button {
+    background-color: var(--accent-color);
+    color: var(--background-color);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
     cursor: pointer;
-    border: none;
+    font-size: 1rem;
     transition: background-color 0.3s ease;
-    width: 100%;
-    margin-top: 20px;
-}
-
-.submit-btn:hover {
-    background-color: #16a085; /* Hover effect with lighter green */
-}
-/* Ensures buttons are stacked vertically */
-.cta-buttons {
+  }
+  
+  button:hover {
+    background-color: #91bfd9;
+  }
+  
+  .top-bar {
     display: flex;
-    flex-direction: column; /* Stack buttons vertically */
-    gap: 20px; /* Adds some space between the buttons */
-    align-items: center; /* Center-align the buttons */
-    margin-top: 30px; /* Optional, adds spacing above the buttons */
-}
-
-.cta-buttons .button {
-    width: 100%; /* Makes the buttons take up the full width of the container */
-    max-width: 300px; /* Optional, to limit the maximum width of the buttons */
-}
-
-
-.button.primary {
-    background-color: #1abc9c;
-    color: white;
-    padding: 15px 30px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 8px;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: -20px; 
+    margin-bottom: 20px;
+    padding-right: 10px;
+    gap: 15px;
+  }
+  
+  .top-bar a {
+    color: var(--text-color);
     text-decoration: none;
-    transition: background-color 0.3s ease;
-    border: none;
-}
-
-.button.primary:hover {
-    background-color: #16a085;
-}
-
-
-/* Danger Button - Used for delete or destructive actions */
-.button.danger {
-    background-color: #e74c3c; /* Red color for danger */
-}
-
-.button.danger:hover {
-    background-color: #c0392b; /* Darker red for hover */
-}
+    font-size: 0.95rem;
+  }
+  
+  .top-bar a:hover {
+    color: var(--accent-color);
+  }
+  

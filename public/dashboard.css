@@ -1,0 +1,117 @@
+/* ========== DASHBOARD PAGE-SPECIFIC STYLES ========== */
+
+.main-content {
+    flex: 1;
+    padding: 50px 70px;
+    background-color: #F9F9F9;
+  }
+  
+  .main-content h1 {
+    font-size: 2.6rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  .top-row {
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .status-bar {
+    font-weight: 500;
+    color: var(--accent-color);
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+  }
+  
+  .countdown {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--text-color);
+  }
+  
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  
+  .left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .card {
+    background-color: var(--background-color);
+    border-radius: 20px;
+    padding: 30px 40px;
+    box-shadow: 0 6px 16px var(--shadow-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+  
+  .card h3 {
+    margin-top: 0;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+  }
+  
+  .checklist-item:hover {
+    background-color: rgba(168, 208, 230, 0.12);
+    border-radius: 10px;
+  }
+  
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .calendar-day {
+    padding: 8px;
+    background-color: #F9F9F9;
+    border-radius: 10px;
+    color: var(--text-color);
+    transition: background-color 0.3s;
+  }
+  
+  .calendar-day:hover {
+    background-color: var(--accent-color);
+    color: var(--background-color);
+  }
+  
+  .calendar-day.event-day {
+    background-color: var(--accent-color);
+    color: var(--background-color);
+  }
+  
+  #budgetChart {
+    max-width: 180px;
+    margin: 20px auto;
+  }
+  
+  @media (max-width: 1024px) {
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+    .main-content {
+      padding: 30px;
+    }
+  }
+  @media (max-width: 768px) {
+    .main-content {
+      padding: 20px;
+    }
+  }
+  

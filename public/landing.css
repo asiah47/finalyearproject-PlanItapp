@@ -1,0 +1,142 @@
+/* ========== LANDING PAGE ========== */
+
+body {
+    font-family: 'IBM Plex Sans', 'Inter', sans-serif;
+    background: url('/images/background.png') center/cover no-repeat fixed;
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+  }
+  
+  .landing-container {
+    max-width: 1200px;
+    margin: 80px auto;
+    text-align: center;
+  }
+  
+  .landing-container h1 {
+    font-size: 2.8rem;
+    margin-bottom: 50px;
+    color: var(--text-color);
+  }
+  
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    justify-items: center;
+  }
+  
+  .event-card {
+    background-color: var(--background-color);
+    padding: 30px 20px;
+    border-radius: 20px;
+    box-shadow: 0 6px 16px var(--shadow-color);
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+  
+  .event-card h2 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+  
+  .event-card p {
+    font-size: 0.95rem;
+    color: var(--muted-text-color);
+    margin-bottom: 20px;
+  }
+  
+  .card-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .view-btn, .delete-btn {
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .view-btn {
+    background-color: var(--accent-color);
+    color: var(--background-color);
+  }
+  
+  .view-btn:hover {
+    background-color: #91bfd9;
+  }
+  
+  .delete-btn {
+    background-color: #D96C6C;
+    color: var(--background-color);
+  }
+  
+  .delete-btn:hover {
+    background-color: #c75b5b;
+  }
+  
+  .empty-state {
+    margin-top: 100px;
+  }
+  
+  .add-btn {
+    font-size: 1.5rem;
+    text-decoration: none;
+    background-color: var(--accent-color);
+    color: var(--background-color);
+    padding: 15px 30px;
+    border-radius: 30px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-btn:hover {
+    background-color: #91bfd9;
+  }
+  
+
+  .routes-section {
+    margin-bottom: 60px;
+    padding: 30px;
+    background-color: var(--background-color);
+    border-radius: 20px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+  }
+  
+  .routes-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+  
+  .routes-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .routes-section li {
+    margin: 8px 0;
+  }
+  
+  .routes-section a {
+    color: var(--accent-color);
+    font-size: 1rem;
+    text-decoration: none;
+  }
+  
+  .routes-section a:hover {
+    text-decoration: underline;
+  }
+  

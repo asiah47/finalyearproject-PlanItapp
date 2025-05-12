@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guest Tracker</title>
+  <link rel="stylesheet" href="/main.css">
+  <link rel="stylesheet" href="/guest.css">
+</head>
+<body>
+  <div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <%- include('partials/sidebar', { eventId: eventId }) %>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <h1>Guest Tracker for Event: <%= eventId %></h1>
+
+      <% 
+      const totalGuests = guests.length;
+      const confirmed = guests.filter(guest => guest.rsvp_status === 'yes').length;
+      const declined = guests.filter(guest => guest.rsvp_status === 'no').length;
+      const maybe = guests.filter(guest => guest.rsvp_status === 'maybe').length;
+      %>
+
+      <div class="rsvp-summary">
+        <p>Total Guests: <%= totalGuests %></p>
+        <p>Confirmed (Yes): <%= confirmed %></p>
+        <p>Declined (No): <%= declined %></p>
+        <p>Maybe: <%= maybe %></p>
+      </div>
+
+      <!-- Add Guest Form -->
+      <form action="/guests/<%= eventId %>/add" method="POST">
+        <label for="guest_name">Guest Name:</label>
+        <input type="text" id="guest_name" name="guest_name" required>
+
+        <label for="guest_email">Guest Email:</label>
+        <input type="email" id="guest_email" name="guest_email" required>
+
+        <label for="rsvp_status">RSVP Status:</label>
+        <select id="rsvp_status" name="rsvp_status">
+          <option value="maybe" selected>Maybe</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+
+        <button type="submit">Add Guest</button>
+      </form>
+
+      <!-- Guest List -->
+      <h2>Guest List</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>RSVP</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (guests.length > 0) { %>
+            <% guests.forEach(guest => { %>
+              <tr>
+                <td><%= guest.guest_name %></td>
+                <td><%= guest.guest_email %></td>
+                <td><%= guest.rsvp_status %></td>
+                <td>
+                  <a href="/guests/<%= eventId %>/edit/<%= guest.guest_id %>">Edit</a> |
+                  <form action="/guests/<%= eventId %>/delete/<%= guest.guest_id %>" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="4">No guests added yet.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</body>
+</html>

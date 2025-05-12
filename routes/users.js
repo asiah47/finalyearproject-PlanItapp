@@ -12,18 +12,6 @@ const redirectLogin = (req, res, next) => {
     }
 };
 
-// Handles our routes
-// List User Route
-router.get('/list', redirectLogin, function (req, res, next) {
-    let sqlquery = "SELECT username, first_name, last_name, email FROM users";
-    db.query(sqlquery, (err, result) => {
-        if (err) {
-            return next(err);
-        }
-        res.render("listusers.ejs", { users: result });
-    });
-});
-
 // Login Route
 router.get('/login', function (req, res, next) {
     res.render('login.ejs');
@@ -46,8 +34,12 @@ router.post('/loggedin', function (req, res, next) {
             if (err) {
                 return next(err);
             } else if (result === true) {
-                req.session.userId = user.id;
-                req.session.username = user.username;
+
+                req.session.user = {
+                    id: user.id,
+                    username: user.username
+                  };
+
                 res.render('loginsuccessful', { user: user });
             } else {
                 return res.send("Login Failed: Incorrect Password");

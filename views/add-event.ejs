@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Event - PlanIT</title>
+</head>
+<body>
+  <h1>Add a New Event</h1>
+
+  <form action="/add-event" method="POST">
+    <label for="event_name">Event Name:</label><br>
+    <input type="text" id="event_name" name="event_name" required><br><br>
+
+    <label for="event_date">Event Date & Time:</label>
+    <input type="datetime-local" id="event_date" name="event_date" required>    
+    
+    <button type="submit">Create Event</button>
+  </form>
+
+  <br>
+  <a href="/"> Back to My Events</a>
+</body>
+</html>

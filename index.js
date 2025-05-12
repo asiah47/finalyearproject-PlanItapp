@@ -3,6 +3,7 @@ var express = require ('express')
 var ejs = require('ejs')
 var session = require ('express-session')
 
+
 // Create the express application object
 const app = express()
 const port = 8000
@@ -45,22 +46,40 @@ app.use(session({
         resave: false,
         saveUninitialized: false,
         cookie: {
-            expires: 600000
+           maxAge: 10 * 60 * 1000
         }
 }))
 
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null; 
+    next();
+});
+
+// Load the route handlers for /users 
+const usersRoutes = require("./routes/users")
+app.use('/users', usersRoutes)
 
 // Load the route handlers for /main
 const mainRoutes = require("./routes/main")
 app.use('/', mainRoutes)
 
-// Load the route handlers for /users
-const usersRoutes = require('./routes/users')
-app.use('/users', usersRoutes)
+// Load the route handlers to /budget 
+const budgetRoutes = require('./routes/budget');
+app.use('/budget', budgetRoutes);
 
-// Load the route handlers for /tasks
-const tasksRoutes = require('./routes/tasks')
-app.use('/tasks', tasksRoutes)
+// Load the route handlers to /guests
+const guestRoutes = require('./routes/guests');
+app.use('/guests', guestRoutes);
+
+// Load the route handlers to /tasks
+const tasksRoutes = require('./routes/tasks');
+app.use('/tasks', tasksRoutes);
+
+// Load the route handlers to /moodboard
+const moodboardRoutes = require('./routes/moodboard');
+app.use('/moodboard', moodboardRoutes);
+app.use('/uploads', express.static('uploads'));
+
 
 // Start the web app listening
 app.listen(port, () => console.log(`Node app listening on port ${port}!`))
