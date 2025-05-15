@@ -1,122 +1,77 @@
 /* ========== DASHBOARD PAGE-SPECIFIC STYLES ========== */
 
 .main-content {
-    flex: 1;
-    padding: 50px 70px;
-    background-color: #F9F9F9;
-  }
-  
-  .main-content h1 {
-    font-size: 2.6rem;
-    font-weight: 600;
-    margin-bottom: 15px;
-  }
-  
-  .top-row {
-    margin-bottom: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .status-bar {
-    font-weight: 500;
-    color: var(--accent-color);
-    font-size: 1rem;
-    letter-spacing: 0.04em;
-  }
-  
-  .countdown {
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: var(--text-color);
-  }
-  
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 40px;
-    align-items: start;
-  }
-  
-  .left-column, .right-column {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-  }
-  
-  .card {
-    background-color: var(--background-color);
-    border-radius: 20px;
-    padding: 30px 40px;
-    box-shadow: 0 6px 16px var(--shadow-color);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  }
-  
-  .card h3 {
-    margin-top: 0;
-    font-size: 1.3rem;
-    margin-bottom: 15px;
-  }
-  
-  .checklist-item:hover {
-    background-color: rgba(168, 208, 230, 0.12);
-    border-radius: 10px;
-  }
-  
-  .calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 0.9rem;
-  }
-  
-  .calendar-day {
-    padding: 8px;
-    background-color: #F9F9F9;
-    border-radius: 10px;
-    color: var(--text-color);
-    transition: background-color 0.3s;
-  }
-  
-  .calendar-day:hover {
-    background-color: var(--accent-color);
-    color: var(--background-color);
-  }
-  
-  .calendar-day.event-day {
-    background-color: var(--accent-color);
-    color: var(--background-color);
-  }
-  
-  #budgetChart {
-    max-width: 180px;
-    margin: 20px auto;
-  }
-
-
-
-.budget-progress {
-  background-color: #f2f2f2;
-  height: 10px;
-  border-radius: 6px;
-  margin-top: 0.75rem;
-  overflow: hidden;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  padding: 50px 70px;
+  background-color: #F9F9F9;
 }
 
-.progress-bar {
-  height: 100%;
-  background-color: #8CA88F; 
-  border-radius: 6px 0 0 6px;
-  transition: width 0.4s ease-in-out;
+.main-content h1 {
+  font-size: 2.6rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* Top Section */
+.top-row {
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-bar {
+  font-weight: 600;
+  color: var(--accent-color);
+  font-size: 1rem;
+  background-color: rgba(230, 57, 70, 0.08);
+  padding: 8px 14px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.countdown {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* Grid Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.left-column,
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Cards */
+.card {
+  background-color: var(--background-color);
+  border-radius: 20px;
+  padding: 30px 40px;
+  box-shadow: 0 6px 16px var(--shadow-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  color: var(--accent-color);
+  border-bottom: 1px solid rgba(230, 57, 70, 0.15);
+  padding-bottom: 8px;
+  margin-bottom: 15px;
 }
 
 .card p {
@@ -129,6 +84,44 @@
   color: #444;
 }
 
+/* Task & Checklist Items */
+.task-item,
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: background-color 0.2s;
+}
+
+.task-item:hover,
+.checklist-item:hover {
+  background-color: rgba(230, 57, 70, 0.05);
+}
+
+/* Budget Chart */
+#budgetChart {
+  max-width: 180px;
+  margin: 20px auto;
+}
+
+.budget-progress {
+  background-color: #f2f2f2;
+  height: 10px;
+  border-radius: 6px;
+  margin-top: 0.75rem;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #8CA88F;
+  border-radius: 6px 0 0 6px;
+  transition: width 0.4s ease-in-out;
+}
 
 .budget-warning {
   color: #b23b3b;
@@ -137,21 +130,75 @@
   font-size: 0.95rem;
 }
 
-.card h3 {
-  margin-bottom: 0.5rem;
+/* Calendar */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+  font-weight: 600;
 }
-  
-  @media (max-width: 1024px) {
-    .dashboard-grid {
-      grid-template-columns: 1fr;
-    }
-    .main-content {
-      padding: 30px;
-    }
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.calendar-day {
+  padding: 8px;
+  background-color: #F9F9F9;
+  border-radius: 10px;
+  color: var(--text-color);
+  transition: background-color 0.3s;
+}
+
+.calendar-day:hover {
+  background-color: var(--accent-color);
+  color: var(--background-color);
+}
+
+.calendar-day.event-day {
+  background-color: var(--accent-color);
+  color: var(--background-color);
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+/* Milestones */
+.milestone-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-left: 4px solid var(--accent-color);
+  background-color: rgba(230, 57, 70, 0.03);
+  border-radius: 8px;
+}
+
+.milestone-date {
+  font-weight: 600;
+  color: var(--accent-color);
+  min-width: 60px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
   }
-  @media (max-width: 768px) {
-    .main-content {
-      padding: 20px;
-    }
+
+  .main-content {
+    padding: 30px;
   }
-  
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 20px;
+  }
+}

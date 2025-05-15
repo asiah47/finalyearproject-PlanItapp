@@ -1,11 +1,22 @@
 <div class="sidebar">
-  <h2>PlanIT</h2>
-  <a href="/">My Events</a>
+  <div class="sidebar-inner">
+    <div class="sidebar-logo">
+      <img src="/images/PlanIT.png" alt="PlanIT Logo" />
+    </div>
 
-  <a href="/dashboard/<%= eventId %>">Dashboard</a>
-  <a href="/budget/<%= eventId %>">Budget</a>
-  <a href="/guests/<%= eventId %>">Guests</a>
-  <a href="/tasks/<%= eventId %>">Tasks</a>
-  <a href="/moodboard/<%= eventId %>">Moodboard</a>
-  <a href="/edit-event/<%= eventId %>">Edit Event</a>
+    <nav class="sidebar-nav">
+
+      <a href="/dashboard/<%= eventId %>"><i class="fas fa-th-large"></i> Dashboard</a>
+      <a href="/moodboard/<%= eventId %>"><i class="fas fa-image"></i> Moodboard</a>
+      <a href="/budget/<%= eventId %>"><i class="fas fa-dollar-sign"></i> Budget</a>
+      <a href="/guests/<%= eventId %>"><i class="fas fa-user-friends"></i> Guest List</a>
+      <a href="/tasks/<%= eventId %>"><i class="fas fa-tasks"></i> Tasks</a>
+      <a href="/edit-event/<%= eventId %>"><i class="fas fa-edit"></i> Edit Event</a>
+      <a href="/landing"><i class="fas fa-calendar-alt"></i> My Events</a>
+
+    </nav>
+  </div>
 </div>
+
+<!-- Add Font Awesome CDN in your layout head -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">

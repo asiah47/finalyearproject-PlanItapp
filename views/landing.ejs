@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PlanIT - My Events</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="/main.css" />
   <link rel="stylesheet" href="/landing.css" />
 </head>
@@ -32,9 +33,9 @@
     <div class="landing-container">
       <h1>Welcome to PlanIT</h1>
 
-      <div class="page-actions">
-        <a href="/add-event" class="primary-btn">➕ Add Event</a>
-      </div>
+      <a href="/add-event" class="primary-btn">
+        <i class="fas fa-plus-circle"></i> Add Event
+      </a>
 
       <% if (events.length > 0) { %>
         <div class="events-grid">
@@ -43,9 +44,13 @@
               <h2><%= event.event_name %></h2>
               <p><%= new Date(event.event_date).toDateString() %></p>
               <div class="card-actions">
-                <a href="/dashboard/<%= event.event_id %>" class="view-btn">View Event</a>
+                <a href="/dashboard/<%= event.event_id %>" class="view-btn">
+                  <i class="fas fa-eye"></i> View Event
+                </a>
                 <form action="/delete-event/<%= event.event_id %>" method="POST">
-                  <button type="submit" class="delete-btn" onclick="return confirm('Delete this event?')">Delete</button>
+                  <button type="submit" class="delete-btn" onclick="return confirm('Delete this event?')">
+                    <i class="fas fa-trash-alt"></i> Delete
+                  </button>
                 </form>
               </div>
             </div>

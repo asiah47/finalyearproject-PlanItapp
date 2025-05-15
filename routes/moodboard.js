@@ -33,7 +33,7 @@ router.get('/:eventId', redirectLogin, (req, res) => {
   const checkEvent = 'SELECT * FROM events WHERE event_id = ? AND user_id = ?';
   db.query(checkEvent, [eventId, userId], (err, result) => {
     if (err) throw err;
-    if (result.length === 0) return res.redirect('/landing'); // Not allowed
+    if (result.length === 0) return res.redirect('/landing'); 
 
     const themeQuery = 'SELECT * FROM themes WHERE event_id = ?';
     db.query(themeQuery, [eventId], (err, themes) => {
