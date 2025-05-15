@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlanIt – Plan Events Smarter</title>
+  <link rel="stylesheet" href="/home.css" />
+  <link rel="stylesheet" href="/main.css" />
+</head>
+<body>
+    <header class="top-nav">
+        <div class="nav-buttons">
+          <% if (user) { %>
+            <a href="/users/profile" class="nav-btn">Profile</a>
+            <a href="/users/logout" class="nav-btn">Logout</a>
+          <% } else { %>
+            <a href="/users/register" class="nav-btn">Register</a>
+            <a href="/users/login" class="nav-btn">Log In</a>
+          <% } %>
+          <a href="/help" class="nav-btn">Help</a>
+        </div>
+      </header>
+
+  <div class="hero-section">
+    <div class="hero-text">
+      <h1>Experience a better way to manage events</h1>
+      <p class="tagline">
+        PlanIt helps you organise events effortlessly — budgets, guests, tasks, moodboards and more.
+      </p>
+      <div class="hero-buttons">
+        <a href="/users/register" class="btn primary">Get Started Free</a>
+        <a href="/users/login" class="btn secondary">Log In</a>
+      </div>
+    </div>
+    <div class="hero-logo-background"></div>
+  </div>
+
+  <section class="features">
+    <div class="feature">
+      <h2>Visual Planning</h2>
+      <p>Build your event theme with a live moodboard and drag-and-drop image layout.</p>
+    </div>
+    <div class="feature">
+      <h2>Budget Tracking</h2>
+      <p>Track your planned vs actual costs and never overspend again.</p>
+    </div>
+    <div class="feature">
+      <h2>Task & Guest Management</h2>
+      <p>Stay on top of tasks and RSVPs with automated checklists and summaries.</p>
+    </div>
+  </section>
+
+  <footer class="homepage-footer">
+    <p>&copy; <%= new Date().getFullYear() %> PlanIt | <a href="/users/login">Login</a> | <a href="/users/register">Register</a></p>
+  </footer>
+</body>
+</html>

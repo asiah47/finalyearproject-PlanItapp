@@ -1,0 +1,129 @@
+/* AUTH PAGES (Register/Login) */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'IBM Plex Sans', 'Inter', sans-serif;
+    background-color: white;
+  }
+  
+  /* Background with centered blob */
+  .auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 60px 40px 20px;
+    position: relative;
+    background: url("/images/blob.png") center center no-repeat;
+    background-size: 900px;
+    box-sizing: border-box;
+  }
+  
+  /* The white card */
+  .auth-box {
+    background-color: white;
+    padding: 30px 32px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  
+  .logo {
+    width: 260px;
+    height: auto;
+    margin: 0 auto 4px;
+    display: block;
+    cursor: pointer;
+  }
+  
+  .subtitle {
+    font-size: 1.4rem;
+    color: #555;
+    margin-top: 4px;
+    margin-bottom: 16px;
+  }
+  
+  .auth-box {
+    padding: 24px 32px;
+  }
+  
+  /* Form fields */
+  .register-form input {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  
+  /* Main register button */
+  .primary-btn {
+    width: 100%;
+    background-color: red;
+    color: white;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  .primary-btn:hover {
+    background-color: red;
+  }
+  
+ 
+  .alt-link {
+    margin-top: 20px;
+    font-size: 0.9rem;
+  }
+  
+  .alt-link a {
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .alt-link a:hover {
+    text-decoration: underline;
+  }
+  
+
+  .error {
+    background-color: #ffe5e5;
+    color: red;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+  
+
+  @media (max-width: 600px) {
+    .auth-container {
+      align-items: flex-start;
+      padding-top: 40px;
+      background-size: 480px;
+    }
+  
+    .auth-box {
+      padding: 24px 20px;
+    }
+  
+    .logo {
+      width: 220px;
+    }
+  }
+  
+ 

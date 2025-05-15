@@ -1,32 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Sign Up to Use PlanIT</title>
-    <link rel="stylesheet" type="text/css" href="/main.css" />
-  </head>
-  <body>
-    <div class="signup-wrapper">
-      <div class="page-wrapper">
-        <h1>Sign up for PlanIT</h1>
-        <h2>Enter Your Information Below</h2>
-
-        <!-- Sign Up Form -->
-        <form method="POST" action="registered" class="signup-form">
-          <p>First Name: <input id="first" type="text" name="first" required /></p>
-          <p>Last Name: <input id="last" type="text" name="last" required /></p>
-          <p>Email: <input id="email" type="email" name="email" required /></p>
-          <p>Username: <input id="username" type="text" name="username" required /></p>
-          <p>Password: <input id="password" type="password" name="password" required /></p>
-          
-          <!-- Submit Button -->
-          <input type="submit" value="Register" class="button primary" />
-        </form>
-
-        <!-- Login Redirect -->
-        <div class="login-prompt">
-          <p>Already have an account? <a href="/users/login" class="button secondary">Login</a></p>
-        </div>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Register | PlanIt</title>
+  <link rel="stylesheet" href="/main.css" />
+  <link rel="stylesheet" href="/user.css" />
+</head>
+<body>
+  
+  <header class="top-nav">
+    <div class="nav-buttons">
+      <% if (user) { %>
+        <a href="/users/profile" class="nav-btn">Profile</a>
+        <a href="/users/logout" class="nav-btn">Logout</a>
+      <% } else { %>
+        <a href="/users/register" class="nav-btn">Register</a>
+        <a href="/users/login" class="nav-btn">Log In</a>
+      <% } %>
+      <a href="/help" class="nav-btn">Help</a>
     </div>
-  </body>
+  </header>
+
+  <div class="auth-container">
+    <div class="auth-box">
+      <a href="/">
+        <img src="/images/PlanIt.png" alt="PlanIt logo" class="logo" />
+      </a>
+      <p class="subtitle">Create your account</p>
+
+      <!-- Display error if exists -->
+      <% if (typeof error !== "undefined") { %>
+        <p class="error"><%= error %></p>
+      <% } %>
+
+      <form method="POST" action="/users/register" class="register-form">
+        <input type="text" name="first" placeholder="First Name" required />
+        <input type="text" name="last" placeholder="Last Name" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
+
+        <button type="submit" class="primary-btn">Register</button>
+      </form>
+
+      <p class="alt-link">Already have an account? <a href="/users/login">Log In</a></p>
+    </div>
+  </div>
+</body>
 </html>

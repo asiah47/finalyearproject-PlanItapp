@@ -1,28 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Your Profile</title>
-  <link rel="stylesheet"  type="text/css" href="/main.css" />
+  <meta charset="UTF-8" />
+  <title>Your Profile | PlanIt</title>
+  <link rel="stylesheet" href="/user.css" />
+  <link rel="stylesheet" href="/main.css" />
+
 </head>
 <body>
-  <%- include('partials/sidebar') %>
 
-  <div class="page-wrapper">
-    <h1>Your Profile!</h1>
+  <header class="top-nav">
+    <div class="nav-buttons">
+      <% if (user) { %>
+        <a href="/users/profile" class="nav-btn">Profile</a>
+        <a href="/users/logout" class="nav-btn">Logout</a>
+      <% } else { %>
+        <a href="/users/register" class="nav-btn">Register</a>
+        <a href="/users/login" class="nav-btn">Log In</a>
+      <% } %>
+      <a href="/help" class="nav-btn">Help</a>
+    </div>
+  </header>
 
-    <h2>Account Details</h2>
-    <p>First Name: <%= firstName %></p>
-    <p>Last Name: <%= lastName %></p>
-    <p>Email: <%= email %></p>
+  <div class="auth-container">
+    <div class="auth-box">
+      <h1 class="logo">Plan<span>It</span></h1>
+      <p class="subtitle">Your Profile</p>
 
-    <!-- Form to delete the account -->
-    <h3>Delete Account</h3>
-    <form action="/users/delete-account" method="POST">
-      <p>Are you sure certain you want to DELETE YOUR ACCOUNT? This is permanent and will remove all your tasks.</p>
-      <button type="submit" class="button primary danger">Delete My Account</button>
+      <!-- Update Profile Form -->
+      <form class="profile-form" action="/users/update-profile" method="POST">
+        <div class="form-line">
+          <label>First Name</label>
+          <input type="text" name="first_name" value="<%= user.firstName %>" required />
+        </div>
+        <div class="form-line">
+          <label>Last Name</label>
+          <input type="text" name="last_name" value="<%= user.lastName %>" required />
+        </div>
+        <div class="form-line">
+          <label>Username</label>
+          <input type="text" name="username" value="<%= user.username %>" required />
+        </div>
+        <div class="form-line">
+          <label>Email</label>
+          <input type="email" name="email" value="<%= user.email %>" required />
+        </div>
 
-    </form>
+        <div class="actions" style="margin-top: 20px;">
+          <button type="submit" class="button primary">Save Changes</button>
+          <a href="/landing" class="button secondary">Back to Events</a>
+        </div>
+      </form>
+
+      <!-- Separate Delete Form -->
+      <div style="margin-top: 40px;">
+        <p style="color: #900; font-size: 14px;">Want to delete your account?</p>
+        <form action="/users/delete-account" method="POST">
+          <button type="submit" class="button danger">Delete My Account</button>
+        </form>
+      </div>
+    </div>
   </div>
-
 </body>
 </html>

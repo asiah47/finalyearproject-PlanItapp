@@ -1,56 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PlanIT - My Events</title>
-  <link rel="stylesheet" href="/main.css">
-  <link rel="stylesheet" href="/landing.css">
+  <link rel="stylesheet" href="/main.css" />
+  <link rel="stylesheet" href="/landing.css" />
 </head>
-<body>
-  <div class="landing-container">
-    <h1>Welcome to PlanIT</h1>
+<body class="landing-page">
 
-    <div class="routes-section">
-      <h2>PlanIT Pages</h2>
-      <ul>
-        <li><a href="/">Landing Page</a></li>
-        <li><a href="/add-event">Add Event</a></li>
-        <li><a href="/dashboard/1">Dashboard (event 1)</a></li>
-        <li><a href="/budget/1">Budget</a></li>
-        <li><a href="/guests/1">Guests</a></li>
-        <li><a href="/tasks/1">Tasks</a></li>
-        <li><a href="/moodboard/1">Moodboard</a></li>
-        <li><a href="/edit-event/1">Edit Event</a></li>
-        <li><a href="/users/login">Login</a></li>
-        <li><a href="/users/register">Register</a></li>
-        <li><a href="/users/profile">Profile</a></li>
-        <li><a href="/users/logout">Logout</a></li>
-      </ul>
+  <!-- Top Navigation Bar -->
+  <header class="top-nav with-logo">
+    <a href="/landing" class="nav-logo">
+      <img src="/images/PlanIt.png" alt="PlanIt logo" />
+    </a>
+    <div class="nav-buttons">
+      <a href="/landing" class="nav-btn">My Events</a>
+      <% if (user) { %>
+        <a href="/users/profile" class="nav-btn">Profile</a>
+        <a href="/users/logout" class="nav-btn">Logout</a>
+      <% } else { %>
+        <a href="/users/register" class="nav-btn">Register</a>
+        <a href="/users/login" class="nav-btn">Log In</a>
+      <% } %>
+      <a href="/help" class="nav-btn">Help</a>
     </div>
+  </header>
 
+  <!-- Background Blob + Content -->
+  <div class="landing-blob-background">
+    <div class="landing-container">
+      <h1>Welcome to PlanIT</h1>
 
-    <% if (events.length > 0) { %>
-      <div class="events-grid">
-        <% events.forEach(event => { %>
-          <div class="event-card">
-            <h2><%= event.event_name %></h2>
-            <p><%= event.event_date.toDateString() %></p>
-            <div class="card-actions">
-              <a href="/dashboard/<%= event.event_id %>" class="view-btn">View Event</a>
-              <form action="/delete-event/<%= event.event_id %>" method="POST">
-                <button type="submit" class="delete-btn" onclick="return confirm('Delete this event?')">Delete</button>
-              </form>
+      <div class="page-actions">
+        <a href="/add-event" class="primary-btn">➕ Add Event</a>
+      </div>
+
+      <% if (events.length > 0) { %>
+        <div class="events-grid">
+          <% events.forEach(event => { %>
+            <div class="event-card">
+              <h2><%= event.event_name %></h2>
+              <p><%= new Date(event.event_date).toDateString() %></p>
+              <div class="card-actions">
+                <a href="/dashboard/<%= event.event_id %>" class="view-btn">View Event</a>
+                <form action="/delete-event/<%= event.event_id %>" method="POST">
+                  <button type="submit" class="delete-btn" onclick="return confirm('Delete this event?')">Delete</button>
+                </form>
+              </div>
             </div>
-          </div>
-        <% }) %>
-      </div>
-    <% } else { %>
-      <div class="empty-state">
-        <a href="/add-event" class="add-btn">➕ Add Your First Event</a>
-      </div>
-    <% } %>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <p>No events yet.</p>
+          <a href="/add-event" class="add-btn">➕ Add Your First Event</a>
+        </div>
+      <% } %>
+    </div>
   </div>
 </body>
 </html>
-

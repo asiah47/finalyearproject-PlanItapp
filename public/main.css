@@ -1,13 +1,13 @@
 /* ========== MAIN ========== */
 :root {
-    --primary-color: #F4D9D6; 
-    --accent-color: #A8D0E6;   
-    --text-color: #333333;     
-    --muted-text-color: #7A7A7A; 
-    --background-color: #FFFFFF; 
-    --shadow-color: rgba(0, 0, 0, 0.05);
-  }
-  
+  --primary-color: #F4D9D6;           
+  --accent-color: #E63946;           
+  --text-color: #333333;
+  --muted-text-color: #7A7A7A;
+  --background-color: #FFFFFF;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
   body {
     font-family: 'IBM Plex Sans', 'Inter', sans-serif;
     background: url('/images/background.png') center/cover no-repeat fixed;
@@ -16,7 +16,56 @@
     padding: 0;
   }
   
- 
+
+    .auth-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 60px 40px 20px;
+      position: relative;
+      background: url("/images/blob.png") center center no-repeat;
+      background-size: 900px;
+      box-sizing: border-box;
+    }
+
+
+
+.top-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px 60px;
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.top-nav .nav-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-btn {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-radius: 30px;
+  text-decoration: none;
+  border: 2px solid var(--accent-color);
+  color: var(--accent-color);
+  background-color: transparent;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-btn:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
   .dashboard-container {
     display: flex;
     max-width: 1800px;
@@ -99,3 +148,11 @@
     color: var(--accent-color);
   }
   
+  .form-label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 6px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--text-color);
+  }

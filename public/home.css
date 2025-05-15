@@ -1,0 +1,194 @@
+/* HOMEPAGE STYLES */
+
+body {
+    font-family: 'IBM Plex Sans', 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #222;
+    overflow-x: hidden;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 80px 60px;
+    background: linear-gradient(to right, #ffffff 50%, #f9f9f9 100%);
+    min-height: 500px;
+    overflow: hidden;
+  }
+  
+  .hero-text {
+    flex: 1;
+    z-index: 2;
+    max-width: 600px;
+  }
+  
+  .hero-text h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #1e1e1e;
+  }
+  
+  .hero-text .tagline {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+    max-width: 90%;
+  }
+  
+  .hero-buttons .btn {
+    padding: 12px 24px;
+    margin-right: 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  
+  .btn.primary {
+    background-color: red;
+    color: white;
+  }
+  .btn.primary:hover {
+    background-color: red;
+  }
+  .btn.secondary {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+  .btn.secondary:hover {
+    background-color: #cfcfcf;
+  }
+  
+  /* Logo as background graphic */
+  .hero-logo-background {
+    background-image: url("/images/PlanIt.png");
+    background-size: 75%;
+    background-repeat: no-repeat;
+    background-position: center right;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 70%;
+    opacity: 0.99;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* Features Section */
+  .features {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 80px 60px;
+    background-color: #ffffff;
+    border-top: 1px solid #eee;
+  }
+  
+  .feature {
+    flex: 1;
+    max-width: 300px;
+    margin: 20px;
+    text-align: center;
+  }
+  
+  .feature h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    color: red;
+  }
+  
+  .feature p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  /* Footer */
+  .homepage-footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9rem;
+    background-color: #f5f5f5;
+    color: #777;
+  }
+  .homepage-footer a {
+    color: red;
+    text-decoration: none;
+  }
+  .homepage-footer a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero-section {
+      flex-direction: column;
+      text-align: center;
+      padding: 60px 20px;
+    }
+  
+    .hero-logo-background {
+      background-position: center bottom;
+      opacity: 0.1;
+      width: 100%;
+      height: 300px;
+    }
+  
+    .features {
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+    }
+  }
+  
+  /* Top Nav */
+.top-nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px 60px;
+    background: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+  }
+  
+  .nav-buttons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .nav-btn {
+    border-radius: 30px;
+    font-size: 0.95rem;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+  }
+  
+  .btn.primary.nav-btn {
+    padding: 10px 24px;
+    font-weight: bold;
+  }
+  
+  .btn.secondary.nav-btn {
+    font-weight: 500;
+  }
+
+  .btn {
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .btn:hover {
+    text-decoration: none;
+  }
+  

@@ -1,122 +1,135 @@
-// Create a new router
-const express = require("express")
-const router = express.Router()
-const bcrypt = require('bcrypt')
-const saltRounds = 10
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const redirectLogin = (req, res, next) => {
-    if (!req.session.userId) {
-        res.redirect('/users/login'); 
-    } else {
-        next();
-    }
+  if (!req.session.userId) {
+    return res.redirect("/users/login");
+  }
+  next();
 };
 
-// Login Route
-router.get('/login', function (req, res, next) {
-    res.render('login.ejs');
+// GET: Login Page
+router.get("/login", (req, res) => {
+  res.render("login");
 });
 
-router.post('/loggedin', function (req, res, next) {
-    const username = req.body.username;
-    const password = req.body.password;
-    const sqlquery = "SELECT * FROM users WHERE username = ?";
-    db.query(sqlquery, [username], (err, result) => {
-        if (err) {
-            return next(err);
-        }
-        if (result.length === 0) {
-            return res.send("Login failed: Username is not recognised.");
-        }
-        const user = result[0];
-        const hashedPassword = user.hashed_password;
-        bcrypt.compare(password, hashedPassword, function (err, result) {
-            if (err) {
-                return next(err);
-            } else if (result === true) {
+// POST: Handle Login
+router.post("/loggedin", (req, res, next) => {
+  const { username, password } = req.body;
+  const sql = "SELECT * FROM users WHERE username = ?";
 
-                req.session.user = {
-                    id: user.id,
-                    username: user.username
-                  };
+  db.query(sql, [username], (err, result) => {
+    if (err) return next(err);
+    if (result.length === 0) return res.send("Login failed: Username not found.");
 
-                res.render('loginsuccessful', { user: user });
-            } else {
-                return res.send("Login Failed: Incorrect Password");
-            }
-        });
+    const user = result[0];
+    bcrypt.compare(password, user.hashed_password, (err, match) => {
+      if (err) return next(err);
+      if (!match) return res.send("Login failed: Incorrect password.");
+
+      // Session
+      req.session.user = {
+        id: user.user_id,
+        username: user.username,
+        name: user.first_name + " " + user.last_name,
+      };
+      req.session.userId = user.user_id;
+      res.redirect("/landing");
     });
+  });
 });
 
-
-
-// Register and Registered Routes
-router.get('/register', function (req, res, next) {
-    res.render('register.ejs');
+// GET: Register Page
+router.get("/register", (req, res) => {
+  res.render("register");
 });
 
-router.post('/registered', function (req, res, next) {
-    const plainPassword = req.body.password;
-    bcrypt.hash(plainPassword, saltRounds, function (err, hashedPassword) {
-        // Saving data to the database 
-        let sqlquery = "INSERT INTO users (username, first_name, last_name, email, hashed_password) VALUES (?, ?, ?, ?, ?)";
-        let newrecord = [req.body.username, req.body.first, req.body.last, req.body.email, hashedPassword];
-        
-        db.query(sqlquery, newrecord, (err, result) => {
-            if (err) {
-                return next(err);
-            }
-            let resultMessage = 'Hello ' + req.body.first + ' ' + req.body.last + ' you are now registered!';
-            resultMessage += ' Your hashed password is: ' + hashedPassword;
-            res.send(resultMessage);
-        });
-    });
-});
+// POST: Handle Registration
+router.post("/register", (req, res, next) => {
+  const { username, first, last, email, password, confirmPassword } = req.body;
+  if (password !== confirmPassword) {
+    return res.render("register", { error: "Passwords do not match." });
+  }
 
+  bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+    if (err) return next(err);
 
-// Routes for the Profile Page
-router.get('/profile',redirectLogin, (req, res, next) => {
-    const userId = req.session.userId; 
-    
-    // Query to fetch user's details
-    const query = 'SELECT first_name, last_name, email FROM users WHERE id = ?';
-    
-    db.query(query, [userId], (err, results) => {
+    const sql = `
+      INSERT INTO users (username, first_name, last_name, email, hashed_password)
+      VALUES (?, ?, ?, ?, ?)`;
+    const values = [username, first, last, email, hashedPassword];
+
+    db.query(sql, values, (err) => {
       if (err) {
+        if (err.code === "ER_DUP_ENTRY") {
+          return res.render("register", { error: "Username already taken." });
+        }
         return next(err);
       }
+
+      res.redirect("/users/login");
+    });
+  });
+});
+
+// GET: Profile
+router.get("/profile", redirectLogin, (req, res, next) => {
+    const userId = req.session.userId;
   
-      const user = results[0]; 
-      res.render('profile', {
-        firstName: user.first_name || 'No name provided',
-        lastName: user.last_name,
-        email: user.email,
+    const query = `
+      SELECT first_name, last_name, username, email FROM users WHERE user_id = ?
+    `;
+  
+    db.query(query, [userId], (err, results) => {
+      if (err) return next(err);
+      const user = results[0];
+  
+      res.render("profile", {
+        user: {
+          firstName: user.first_name,
+          lastName: user.last_name,
+          username: user.username,
+          email: user.email,
+        },
       });
     });
-});
+  });
+
+  router.post("/update-profile", redirectLogin, (req, res, next) => {
+    const userId = req.session.userId;
+    const { first_name, last_name, username, email } = req.body;
   
-// Rout for Deleting Account
-router.post('/delete-account', redirectLogin, (req, res, next) => {
-    const userId = req.session.userId;  
-
-    // Query to delete user and their tasks from the database
-    const deleteQuery = 'DELETE FROM users WHERE id = ?';
-
-    db.query(deleteQuery, [userId], (err, results) => {
-        if (err) {
-            return next(err);
-        }
-
-        // Destroy the session after account deletion
-        req.session.destroy((err) => {
-            if (err) {
-                return next(err);
-            }
-
-            res.redirect('/users/login'); 
-        });
+    const query = `
+      UPDATE users SET first_name = ?, last_name = ?, username = ?, email = ? WHERE user_id = ?
+    `;
+  
+    db.query(query, [first_name, last_name, username, email, userId], (err) => {
+      if (err) return next(err);
+      // Update session name too
+      req.session.user.name = `${first_name} ${last_name}`;
+      req.session.user.username = username;
+      res.redirect("/users/profile");
     });
+  });
+
+// POST: Delete Account
+router.post("/delete-account", redirectLogin, (req, res, next) => {
+  const userId = req.session.userId;
+  db.query("DELETE FROM users WHERE user_id = ?", [userId], (err) => {
+    if (err) return next(err);
+    req.session.destroy(() => {
+      res.redirect("/users/login");
+    });
+  });
 });
 
-// Export the router object so index.js can access it
+// GET: Logout
+router.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
+});
+
 module.exports = router;

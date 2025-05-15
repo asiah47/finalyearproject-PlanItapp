@@ -2,22 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Add Event - PlanIT</title>
+  <title>Add Event | PlanIt</title>
+  <link rel="stylesheet" href="/main.css">
+  <link rel="stylesheet" href="/user.css">
 </head>
 <body>
-  <h1>Add a New Event</h1>
+  <div class="auth-container">
+    <div class="auth-box">
+      <a href="/">
+        <img src="/images/PlanIt.png" alt="PlanIt logo" class="logo" />
+      </a>
+      <p class="subtitle">Add a New Event</p>
 
-  <form action="/add-event" method="POST">
-    <label for="event_name">Event Name:</label><br>
-    <input type="text" id="event_name" name="event_name" required><br><br>
+      <form action="/add-event" method="POST" class="register-form">
+        <label for="event_name" class="form-label">Event Name</label>
+        <input type="text" id="event_name" name="event_name" required>
 
-    <label for="event_date">Event Date & Time:</label>
-    <input type="datetime-local" id="event_date" name="event_date" required>    
-    
-    <button type="submit">Create Event</button>
-  </form>
+        <label for="event_date" class="form-label">Event Date & Time</label>
+        <input type="datetime-local" id="event_date" name="event_date" required>    
 
-  <br>
-  <a href="/"> Back to My Events</a>
+        <button type="submit" class="primary-btn">Create Event</button>
+      </form>
+
+      <p class="alt-link"><a href="/landing">← Back to My Events</a></p>
+    </div>
+  </div>
 </body>
 </html>
+

@@ -2,6 +2,8 @@
 var express = require ('express')
 var ejs = require('ejs')
 var session = require ('express-session')
+const mysql = require('mysql2');
+const path = require('path');
 
 
 // Create the express application object
@@ -16,9 +18,6 @@ app.use(express.urlencoded({ extended: true }))
 
 // Set up public folder (for css and static js)
 app.use(express.static(__dirname + '/public'))
-
-// Define database connection 
-const mysql = require('mysql2');
 
 const db = mysql.createConnection({
     host: 'localhost',
@@ -55,28 +54,19 @@ app.use((req, res, next) => {
     next();
 });
 
-// Load the route handlers for /users 
-const usersRoutes = require("./routes/users")
-app.use('/users', usersRoutes)
-
-// Load the route handlers for /main
-const mainRoutes = require("./routes/main")
-app.use('/', mainRoutes)
-
-// Load the route handlers to /budget 
+// Routes
+const usersRoutes = require("./routes/users");
+const mainRoutes = require("./routes/main");
 const budgetRoutes = require('./routes/budget');
-app.use('/budget', budgetRoutes);
-
-// Load the route handlers to /guests
 const guestRoutes = require('./routes/guests');
-app.use('/guests', guestRoutes);
-
-// Load the route handlers to /tasks
 const tasksRoutes = require('./routes/tasks');
-app.use('/tasks', tasksRoutes);
-
-// Load the route handlers to /moodboard
 const moodboardRoutes = require('./routes/moodboard');
+
+app.use('/users', usersRoutes);
+app.use('/', mainRoutes);
+app.use('/budget', budgetRoutes);
+app.use('/guests', guestRoutes);
+app.use('/tasks', tasksRoutes);
 app.use('/moodboard', moodboardRoutes);
 app.use('/uploads', express.static('uploads'));
 
