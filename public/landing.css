@@ -142,6 +142,7 @@ body.landing-page {
   font-size: 0.95rem;
   color: var(--muted-text-color);
   margin-bottom: 20px;
+}
 
 
 .card-actions {
@@ -149,7 +150,6 @@ body.landing-page {
   justify-content: center;
   gap: 12px;
 }
-
 
 .empty-state {
   margin-top: 80px;
