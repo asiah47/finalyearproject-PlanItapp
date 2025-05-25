@@ -8,7 +8,7 @@
 
 ## Project Overview
 
-PlanIT is a full-stack web application that provides users with a collaborative platform to plan events effectively — combining creativity, organization, and management tools in one interface. Designed as part of my final year Computer Science project, it addresses the gap in the market between rigid professional tools and overly casual planning apps.
+PlanIT is a full-stack web application that provides users with a collaborative platform to plan events effectively — combining creativity, organisation, and management tools in one interface. Designed as part of my final year Computer Science project. 
 
 The application supports everything from visual moodboards to budget tracking and guest management, making it suitable for planning personal celebrations, weddings or school events. 
 ---
