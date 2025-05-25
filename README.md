@@ -38,7 +38,7 @@ The application supports everything from visual moodboards to budget tracking an
 - Checklist of incomplete tasks
 - Create and update tasks with status
 
-### 🗓️ Calendar & Milestones
+### Calendar & Milestones
 - Month-view calendar with navigation
 - Countdown to event date
 
@@ -68,7 +68,7 @@ The application supports everything from visual moodboards to budget tracking an
 
 ---
 
-## 🧩 File Structure
+## File Structure
 
 /public
 /css → Stylesheets (main.css, dashboard.css, etc.)
