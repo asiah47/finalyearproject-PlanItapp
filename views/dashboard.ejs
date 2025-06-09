@@ -1,219 +1,193 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title><%= event.event_name %> - Dashboard</title>
-
+  <meta charset="UTF-8">
+  <title><%= event.event_name %> – Dashboard</title>
   <link rel="stylesheet" href="/main.css">
   <link rel="stylesheet" href="/dashboard.css">
-
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="dashboard-container">
-
-    <%- include('partials/sidebar', { eventId: eventId }) %>
-
+    <!-- Sidebar -->
+    <%- include('partials/sidebar', { eventId: event.event_id }) %>
+    <% 
+      const monthNames = [
+        'January','February','March','April','May','June',
+        'July','August','September','October','November','December'
+      ];
+    %>
 
     <div class="main-content">
-      <h1><%= event.event_name %> Dashboard</h1>
+      <!-- Dashboard Header -->
+      <div class="dashboard-header">
+        <div class="dashboard-title">
+          <h1><%= event.event_name %> Dashboard</h1>
+          <span class="status-chip">Planning in Progress</span>
+        </div>
+        <div class="header-actions">
+          <div class="user-links">
+            Welcome, <%= user.name %>! 
+            <a href="/users/profile">Profile</a> |
+            <a href="/users/logout">Log Out</a>
+          </div>
+          <div class="event-info">
+            <p>Event Date: <%= event.event_date.toDateString() %> @ <%= event.event_date.toLocaleTimeString() %></p>
+            <p id="countdown"></p>
+          </div>
+        </div>
+      </div>
 
       <%- include('partials/topbar') %>
 
-      <!-- Top Row: Status + Countdown -->
-      <div class="top-row">
-        <div class="status-bar">
-          <span class="status-label">Status:</span> Planning in Progress
+      <!-- Event Details Card -->
+      <div class="card event-details">
+        <h3>Event Details</h3>
+        <p><strong>Date:</strong> <%= event.event_date.toDateString() %> @ <%= event.event_date.toLocaleTimeString() %></p>
+        <p><strong>Venue:</strong> <%= event.venue || 'Not set' %></p>
+        <p><strong>Address:</strong> <%= event.address || 'TBC' %></p>
+        <p><strong>Guest Limit:</strong> <%= event.maxGuests %></p>
+      </div>
+
+      <!-- Main Grid -->
+      <div class="dashboard-grid">
+        <!-- Left Column -->
+        <div class="left-column">
+          <!-- Tasks Overview -->
+          <div class="card">
+            <h3>Tasks Overview</h3>
+            <% if (tasks && tasks.length) { %>
+              <% tasks.slice(0,3).forEach(t => { %>
+                <div class="task-item">
+                  <div class="task-status <%= t.status %>"></div>
+                  <span><%= t.task_name %></span>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p>No tasks added yet.</p>
+            <% } %>
+            <a href="/tasks/<%= event.event_id %>">View All Tasks</a>
+          </div>
+
+          <!-- Budget Overview -->
+          <div class="card">
+            <h3>Budget Overview</h3>
+            <% if (event.total_budget > 0 && budgets && budgets.length) { %>
+              <canvas id="budgetChart"></canvas>
+              <div class="budget-progress">
+                <div class="progress-bar" style="width:<%= Math.min((totalSpent/event.total_budget)*100,100) %>%"></div>
+              </div>
+              <p><strong>Total Budget:</strong> £<%= Number(event.total_budget).toFixed(2) %></p>
+              <p><strong>Spent:</strong> £<%= totalSpent.toFixed(2) %></p>
+              <p><strong>Remaining:</strong> £<%= Number(event.total_budget - totalSpent).toFixed(2) %></p>
+              <% if (totalSpent > event.total_budget) { %>
+                <p class="budget-warning">⚠️ Over budget!</p>
+              <% } else if (totalSpent > event.total_budget * 0.8) { %>
+                <p class="budget-warning">⚠️ Approaching limit.</p>
+              <% } %>
+            <% } else if (event.total_budget > 0) { %>
+              <p>No budget items yet.</p>
+            <% } else { %>
+              <p>Budget not set.</p>
+              <a href="/edit-event/<%= event.event_id %>">Set Budget</a>
+            <% } %>
+            <a href="/budget/<%= event.event_id %>">View Full Budget</a>
+          </div>
+
+          <!-- Checklist Card -->
+          <div class="card checklist-card">
+            <h3>Checklist</h3>
+            <% if (tasks && tasks.length) { %>
+              <ul class="checklist-list">
+                <% tasks.slice(0,3).forEach(t => { %>
+                  <li>
+                    <input type="checkbox" <%= t.completed ? 'checked' : '' %> disabled>
+                    <label><%= t.task_name %></label>
+                  </li>
+                <% }) %>
+              </ul>
+            <% } else { %>
+              <p>No checklist items yet — add some tasks.</p>
+            <% } %>
+            <a class="card-link" href="/tasks/<%= event.event_id %>">View Checklist</a>
+          </div>
         </div>
-        <div class="event-dates">
-          <p>Event Date: <%= event.event_date.toDateString() %></p>
-          <div class="countdown" id="countdown"></div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+          <!-- Calendar -->
+          <div class="card">
+            <div class="right-column">
+              <!-- Calendar -->
+              <div class="card">
+                <h3>Calendar</h3>
+                <div class="calendar-header">
+                  <a href="?month=<%= prevMonth %>&year=<%= prevYear %>">◀</a>
+                  <span><%= monthNames[eventMonth] %> <%= eventYear %></span>
+                  <a href="?month=<%= nextMonth %>&year=<%= nextYear %>">▶</a>
+                </div>
+                <div class="calendar">
+                  <% 
+                    const firstDay = new Date(eventYear, eventMonth, 1).getDay();
+                    const daysInMonth = new Date(eventYear, eventMonth+1, 0).getDate();
+                  %>
+                  <div class="calendar-day">S</div>
+                  <div class="calendar-day">M</div>
+                  <div class="calendar-day">T</div>
+                  <div class="calendar-day">W</div>
+                  <div class="calendar-day">T</div>
+                  <div class="calendar-day">F</div>
+                  <div class="calendar-day">S</div>
+    
+                  <% for(let i=0;i<firstDay;i++){ %>
+                    <div class="calendar-day"></div>
+                  <% } %>
+    
+                  <% for(let d=1;d<=daysInMonth;d++){ %>
+                    <div class="calendar-day <%= (d===event.event_date.getDate() && eventMonth===event.event_date.getMonth() && eventYear===event.event_date.getFullYear()) ? 'event-day' : '' %>">
+                      <%= d %>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+    
+
+          <!-- Guest Summary -->
+          <div class="card">
+            <h3>Guest Summary</h3>
+            <% const totalG= guestSummary.total||0; const lim=event.maxGuests; const per = lim>0?Math.min((totalG/lim)*100,100):0; %>
+            <p><strong>Total:</strong> <%= totalG %> / <%= lim %></p>
+            <% if(lim>0){ %>
+              <div class="budget-progress">
+                <div class="progress-bar" style="width:<%= per %>%"></div>
+              </div>
+              <% if(totalG>lim){ %>
+                <p class="budget-warning">❗ Over by <%= totalG-lim %> guests</p>
+              <% } else { %>
+                <p><%= lim-totalG %> slots remaining</p>
+              <% } %>
+            <% } %>
+            <a href="/guests/<%= event.event_id %>">Manage Guests</a>
+          </div>
         </div>
       </div>
-
-
-
-
-<!-- Grid Layout -->
-<div class="dashboard-grid">
-
-  <!-- Left Column -->
-  <div class="left-column">
-
-    <!-- Tasks Preview -->
-    <div class="card">
-      <h3>Tasks Overview</h3>
-      <% if (tasks && tasks.length > 0) { %>
-        <% tasks.slice(0, 3).forEach(task => { %>
-          <div class="task-item">
-            <div class="task-status <%= task.status %>"></div>
-            <span><%= task.task_name %></span>
-          </div>
-        <% }) %>
-      <% } else { %>
-        <p>No tasks have been added yet.</p>
-      <% } %>
-      <a href="/tasks/<%= event.event_id %>">View All Tasks</a>
     </div>
+  </div>
 
-    <!-- Budget Donut Chart -->
-    <div class="card">
-      <h3>Budget Overview</h3>
-      <% if (event.total_budget && event.total_budget > 0) { %>
-        <% if (budgets && budgets.length > 0) { %>
-          <canvas id="budgetChart"></canvas>
-          <div class="budget-progress">
-            <div class="progress-bar" style="width: <%= (totalSpent / event.total_budget) * 100 %>%"></div>
-          </div>
-          <p><strong>Total Budget:</strong> £<%= event.total_budget %></p>
-          <p><strong>Spent:</strong> £<%= totalSpent %></p>
-          <p><strong>Remaining:</strong> £<%= event.total_budget - totalSpent %></p>
-          <% if (totalSpent > event.total_budget) { %>
-            <p class="budget-warning"> Over budget!</p>
-          <% } else if (totalSpent > event.total_budget * 0.8) { %>
-            <p class="budget-warning"> You're approaching your limit.</p>
-          <% } %>
-        <% } else { %>
-          <p>No budget items added yet.</p>
-        <% } %>
-        <a href="/budget/<%= event.event_id %>">View Full Budget</a>
-      <% } else { %>
-        <p>Budget has not been set.</p>
-        <a href="/edit-event/<%= event.event_id %>">Set Budget</a>
-      <% } %>
-    </div>
-
-    <!-- Checklist -->
-    <div class="card">
-      <h3>Checklist</h3>
-      <% if (tasks && tasks.length > 0) { %>
-        <% tasks.slice(0, 3).forEach(task => { %>
-          <div class="checklist-item">
-            <input type="checkbox" <%= task.completed ? 'checked' : '' %> disabled>
-            <%= task.task_name %>
-          </div>
-        <% }) %>
-      <% } else { %>
-        <p>No checklist items yet — start by adding tasks.</p>
-      <% } %>
-      <a href="/tasks/<%= event.event_id %>">View Checklist</a>
-    </div>
-
-  </div> 
-
-  <!-- Right Column -->
-  <div class="right-column">
-
-    <!-- Calendar Widget -->
-    <div class="card">
-      <h3>Calendar</h3>
-      <% var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; %>
-
-      <div class="calendar-header">
-        <a href="?month=<%= prevMonth %>&year=<%= prevYear %>">⬅️</a>
-        <span><%= monthNames[eventMonth] %> <%= eventYear %></span>
-        <a href="?month=<%= nextMonth %>&year=<%= nextYear %>">➡️</a>
-      </div>
-
-      <div class="calendar">
-        <% 
-          var firstDay = new Date(eventYear, eventMonth, 1).getDay(); 
-          var daysInMonth = new Date(eventYear, eventMonth + 1, 0).getDate();
-        %>
-        <div class="calendar-day">S</div>
-        <div class="calendar-day">M</div>
-        <div class="calendar-day">T</div>
-        <div class="calendar-day">W</div>
-        <div class="calendar-day">T</div>
-        <div class="calendar-day">F</div>
-        <div class="calendar-day">S</div>
-
-        <% for (let blank = 0; blank < firstDay; blank++) { %>
-          <div class="calendar-day"></div>
-        <% } %>
-
-        <% for (let day = 1; day <= daysInMonth; day++) { %>
-          <div class="calendar-day <%= (day === event.event_date.getDate() && eventMonth === event.event_date.getMonth() && eventYear === event.event_date.getFullYear()) ? 'event-day' : '' %>">
-            <%= day %>
-          </div>
-        <% } %>
-      </div>
-    </div>
-
-    <!-- Guest RSVP Summary -->
-    <div class="card">
-      <h3>Guest Summary</h3>
-      <% if (guestSummary) { %>
-        <p>Total Guests: <%= guestSummary.total || 0 %></p>
-        <p>Yes: <%= guestSummary.confirmed || 0 %> | No: <%= guestSummary.declined || 0 %> | Maybe: <%= guestSummary.maybe || 0 %></p>
-      <% } else { %>
-        <p>No guest data available.</p>
-      <% } %>
-      <a href="/guests/<%= event.event_id %>">Manage Guests</a>
-    </div>
-
-    <!-- Key Milestones -->
-    <div class="card">
-      <h3>Key Milestones</h3>
-      <% if (milestones && milestones.length > 0) { %>
-        <% milestones.forEach(m => { %>
-          <div class="milestone-item">
-            <span class="milestone-date">
-              <%= new Date(m.due_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) %>
-            </span>
-            <span><%= m.milestone_name %></span>
-          </div>
-        <% }) %>
-      <% } else { %>
-        <p>No key milestones defined. Add tasks with due dates to track progress.</p>
-      <% } %>
-      <a href="/tasks/<%= event.event_id %>">View Timeline</a>
-    </div>
-
-  </div> 
-
-</div> 
-
-<script>
-  // Countdown Timer
-  const eventDate = new Date('<%= event.event_date.toISOString() %>');
-  function updateCountdown() {
-    const now = new Date();
-    const timeLeft = eventDate - now;
-    const countdownEl = document.getElementById('countdown');
-    if (timeLeft <= 0) {
-      countdownEl.innerText = 'Event has started!';
-      return;
+  <script>
+    // Countdown script 
+    const eventDate = new Date('<%= event.event_date.toISOString() %>');
+    function updateCountdown() {
+      const now=new Date(); const diff=eventDate-now;
+      if(diff<=0){document.getElementById('countdown').innerText='Event has started!';return;}
+      const d=Math.floor(diff/86400000),h=Math.floor(diff/3600000%24),m=Math.floor(diff/60000%60),s=Math.floor(diff/1000%60);
+      document.getElementById('countdown').innerText=`${d}d ${h}h ${m}m ${s}s left`;
     }
-    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
-    const seconds = Math.floor((timeLeft / 1000) % 60);
-    countdownEl.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s left`;
-  }
-  updateCountdown(); 
-  setInterval(updateCountdown, 1000);
+    updateCountdown(); setInterval(updateCountdown,1000);
 
-  // Budget Donut Chart
-  const budgetCanvas = document.getElementById('budgetChart');
-  if (budgetCanvas) {
-    const ctx = budgetCanvas.getContext('2d');
-    new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Spent', 'Remaining'],
-        datasets: [{
-          data: [<%= totalSpent %>, <%= event.total_budget - totalSpent %>],
-          backgroundColor: ['#8CA88F', '#D9CAB3']
-        }]
-      },
-      options: {
-        cutout: '70%',
-        plugins: { legend: { display: false } }
-      }
-    });
-  }
-
-</script>
+    // Budget chart 
+    const ctx=document.getElementById('budgetChart')?.getContext('2d');
+    if(ctx){new Chart(ctx,{type:'doughnut',data:{labels:['Spent','Remaining'],datasets:[{data:[<%= totalSpent %>,Math.max(<%= event.total_budget-totalSpent %>,0)]}]},options:{cutout:'70%',plugins:{legend:{display:false}}}});}  
+  </script>
 </body>
 </html>

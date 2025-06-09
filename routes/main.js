@@ -1,5 +1,7 @@
 const express = require("express");
-const router = express.Router();
+const router  = express.Router();
+
+const db = global.db;
 
 // Middleware to protect private routes
 const redirectLogin = (req, res, next) => {
@@ -17,8 +19,8 @@ router.get("/", (req, res) => {
 // Landing Page - User's Events
 router.get("/landing", redirectLogin, (req, res) => {
   const userId = req.session.user.id;
-  const query = "SELECT * FROM events WHERE user_id = ?";
-  db.query(query, [userId], (err, events) => {
+  const sql    = "SELECT * FROM events WHERE user_id = ?";
+  db.query(sql, [userId], (err, events) => {
     if (err) throw err;
     res.render("landing", { events });
   });
@@ -31,49 +33,59 @@ router.get("/add-event", redirectLogin, (req, res) => {
 
 // Add Event (POST)
 router.post("/add-event", redirectLogin, (req, res) => {
-  console.log("SESSION AT /add-event:", req.session);
+  const { event_name, event_date, venue, address, maxGuests, total_budget } = req.body;
+  const userId = req.session.user.id;
 
-  const { event_name, event_date, total_budget } = req.body;
-  const userId = req.session.user?.id;
-
-  if (!userId) {
-    console.log("No user ID found in session");
-    return res.status(401).send("You must be logged in to create an event.");
-  }
-
-  const query = `
-    INSERT INTO events (user_id, event_name, event_date, total_budget)
-    VALUES (?, ?, ?, ?)`;
-  db.query(query, [userId, event_name, event_date, total_budget || null], (err, result) => {
-    if (err) throw err;
-    const eventId = result.insertId;
-    res.redirect(`/dashboard/${eventId}`);
-  });
+  const sql = `
+    INSERT INTO events
+      (user_id, event_name, event_date, venue, address, maxGuests, total_budget)
+    VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  db.query(
+    sql,
+    [userId, event_name, event_date, venue, address, maxGuests, total_budget || null],
+    (err, result) => {
+      if (err) throw err;
+      res.redirect(`/dashboard/${result.insertId}`);
+    }
+  );
 });
 
 // Edit Event (GET)
 router.get("/edit-event/:eventId", redirectLogin, (req, res) => {
   const eventId = req.params.eventId;
-  const query = "SELECT * FROM events WHERE event_id = ?";
-  db.query(query, [eventId], (err, result) => {
+  const sql     = "SELECT * FROM events WHERE event_id = ?";
+  db.query(sql, [eventId], (err, rows) => {
     if (err) throw err;
-    res.render("edit-event", { event: result[0] });
+    if (!rows.length) return res.redirect("/landing");
+    res.render("edit-event", { event: rows[0] });
   });
 });
 
 // Edit Event (POST)
 router.post("/edit-event/:eventId", redirectLogin, (req, res) => {
   const eventId = req.params.eventId;
-  const { event_name, event_date, total_budget } = req.body;
-  const query = "UPDATE events SET event_name = ?, event_date = ?, total_budget = ? WHERE event_id = ?";
-  db.query(query, [event_name, event_date, total_budget, eventId], (err) => {
-    if (err) throw err;
-    res.redirect("/landing");
-  });
+  const { event_name, event_date, venue, address, maxGuests, total_budget } = req.body;
+
+  const sql = `
+    UPDATE events
+       SET event_name   = ?,
+           event_date   = ?,
+           venue        = ?,
+           address      = ?,
+           maxGuests    = ?,
+           total_budget = ?
+     WHERE event_id    = ?`;
+  db.query(
+    sql,
+    [event_name, event_date, venue, address, maxGuests, total_budget || null, eventId],
+    (err) => {
+      if (err) throw err;
+      res.redirect("/landing");
+    }
+  );
 });
 
-
-// ✅ Redirect /dashboard to /landing
+// Redirect /dashboard to /landing
 router.get("/dashboard", redirectLogin, (req, res) => {
   res.redirect("/landing");
 });
@@ -82,72 +94,62 @@ router.get("/dashboard", redirectLogin, (req, res) => {
 router.get("/dashboard/:eventId", redirectLogin, (req, res) => {
   const eventId = req.params.eventId;
 
-  const eventQuery = "SELECT * FROM events WHERE event_id = ?";
-  const budgetQuery = "SELECT * FROM budgets WHERE event_id = ?";
-  const guestSummaryQuery = `
-    SELECT 
-      COUNT(*) AS total, 
-      SUM(rsvp_status = 'yes') AS confirmed, 
-      SUM(rsvp_status = 'no') AS declined, 
-      SUM(rsvp_status = 'maybe') AS maybe 
-    FROM guests 
-    WHERE event_id = ?
-  `;
-  const tasksQuery = "SELECT * FROM tasks WHERE event_id = ? ORDER BY due_date ASC";
-  const milestonesQuery = "SELECT * FROM milestones WHERE event_id = ? ORDER BY due_date ASC";
+  const eventSql        = "SELECT * FROM events WHERE event_id = ?";
+  const budgetSql       = "SELECT * FROM budgets WHERE event_id = ?";
+  const guestSummarySql = `
+    SELECT
+      COUNT(*)                    AS total,
+      SUM(rsvp_status = 'yes')    AS confirmed,
+      SUM(rsvp_status = 'no')     AS declined,
+      SUM(rsvp_status = 'maybe')  AS maybe
+    FROM guests
+    WHERE event_id = ?`;
+  const tasksSql        = "SELECT * FROM tasks WHERE event_id = ? ORDER BY due_date ASC";
+  const milestonesSql   = "SELECT * FROM milestones WHERE event_id = ? ORDER BY due_date ASC";
 
-  db.query(eventQuery, [eventId], (err, eventResult) => {
+  db.query(eventSql, [eventId], (err, evRows) => {
     if (err) throw err;
-    if (eventResult.length === 0) {
-      // Event doesn't exist or deleted 
-      return res.redirect("/landing");
-    }
-  
-    const event = eventResult[0];
+    if (!evRows.length) return res.redirect("/landing");
+    const event = evRows[0];
 
-    const currentMonth = req.query.month
-      ? parseInt(req.query.month)
-      : event.event_date.getMonth();
-    const currentYear = req.query.year
-      ? parseInt(req.query.year)
-      : event.event_date.getFullYear();
+    // calendar nav
+    const evDate      = new Date(event.event_date);
+    const currentMonth = req.query.month ? +req.query.month : evDate.getMonth();
+    const currentYear  = req.query.year  ? +req.query.year  : evDate.getFullYear();
+    const prevMonth    = currentMonth === 0  ? 11 : currentMonth - 1;
+    const prevYear     = currentMonth === 0  ? currentYear - 1 : currentYear;
+    const nextMonth    = currentMonth === 11 ? 0  : currentMonth + 1;
+    const nextYear     = currentMonth === 11 ? currentYear + 1 : currentYear;
 
-    const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-    const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-    const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
-    const nextYear = currentMonth === 11 ? currentYear + 1 : currentYear;
-
-    db.query(budgetQuery, [eventId], (err, budgetResults) => {
+    db.query(budgetSql, [eventId], (err, budgetRows) => {
       if (err) throw err;
-      const totalSpent = budgetResults.reduce(
-        (acc, curr) => acc + parseFloat(curr.allocated_amount),
-        0
-      );
+      const totalSpent = budgetRows.reduce((sum, b) => sum + parseFloat(b.allocated_amount), 0);
 
-      db.query(guestSummaryQuery, [eventId], (err, guestSummaryResult) => {
+      db.query(guestSummarySql, [eventId], (err, gsRows) => {
         if (err) throw err;
-        const guestSummary = guestSummaryResult[0];
+        const guestSummary = gsRows[0];
 
-        db.query(tasksQuery, [eventId], (err, taskResults) => {
+        db.query(tasksSql, [eventId], (err, taskRows) => {
           if (err) throw err;
 
-          db.query(milestonesQuery, [eventId], (err, milestoneResults) => {
+          db.query(milestonesSql, [eventId], (err, msRows) => {
             if (err) throw err;
 
             res.render("dashboard", {
+              user:         req.session.user,
               event,
-              eventId: event.event_id,
-              budgets: budgetResults,
+              eventId,
+              budgets:      budgetRows,
               totalSpent,
-              eventMonth: currentMonth,
-              eventYear: currentYear,
+              guestSummary,
+              tasks:        taskRows,
+              milestones:   msRows,
+              eventMonth:   currentMonth,
+              eventYear:    currentYear,
               prevMonth,
               prevYear,
               nextMonth,
-              nextYear,
-              guestSummary,
-              tasks: taskResults,
-              milestones: milestoneResults,
+              nextYear
             });
           });
         });
@@ -160,19 +162,17 @@ router.get("/dashboard/:eventId", redirectLogin, (req, res) => {
 router.post("/dashboard/:eventId/add-budget", redirectLogin, (req, res) => {
   const eventId = req.params.eventId;
   const { category_name, allocated_amount } = req.body;
-
-  const query = "INSERT INTO budgets (event_id, category_name, allocated_amount) VALUES (?, ?, ?)";
-  db.query(query, [eventId, category_name, allocated_amount], (err) => {
+  const sql = "INSERT INTO budgets (event_id, category_name, allocated_amount) VALUES (?, ?, ?)";
+  db.query(sql, [eventId, category_name, allocated_amount], (err) => {
     if (err) throw err;
     res.redirect(`/dashboard/${eventId}`);
   });
 });
 
+// Delete Event
 router.post("/delete-event/:eventId", redirectLogin, (req, res) => {
   const eventId = req.params.eventId;
-  const query = "DELETE FROM events WHERE event_id = ?";
-
-  db.query(query, [eventId], (err) => {
+  db.query("DELETE FROM events WHERE event_id = ?", [eventId], (err) => {
     if (err) throw err;
     res.redirect("/landing");
   });

@@ -1,10 +1,6 @@
 <div class="top-bar">
-    <% if (user) { %>
-      <span class="welcome-text">Welcome, <%= user.username %>!</span>
-      <a href="/users/profile">Profile</a> |
-      <a href="/users/logout">Log Out</a>
-    <% } else { %>
-      <a href="/users/login">Log In</a>
-      <a href="/users/register">Register</a>
-    <% } %>
-  </div>
+  <% if (!user) { %>
+    <a href="/users/login">Log In</a>
+    <a href="/users/register">Register</a>
+  <% } %>
+</div>

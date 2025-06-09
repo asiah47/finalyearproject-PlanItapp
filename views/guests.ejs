@@ -3,87 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guest Tracker</title>
-  <link rel="stylesheet" href="/main.css">
-  <link rel="stylesheet" href="/guest.css">
+  <title>Guest List</title>
+  <link rel="stylesheet" href="/main.css" />
+  <link rel="stylesheet" href="/guest.css" />
 </head>
 <body>
   <div class="dashboard-container">
 
     <!-- Sidebar -->
-    <%- include('partials/sidebar', { eventId: eventId }) %>
+    <%- include('partials/sidebar', { eventId }) %>
 
     <!-- Main Content -->
     <div class="main-content">
-      <h1>Guest Tracker for Event: <%= eventId %></h1>
+      <h1>Guest List for Event: <%= eventId %></h1>
 
       <% 
-      const totalGuests = guests.length;
-      const confirmed = guests.filter(guest => guest.rsvp_status === 'yes').length;
-      const declined = guests.filter(guest => guest.rsvp_status === 'no').length;
-      const maybe = guests.filter(guest => guest.rsvp_status === 'maybe').length;
+        const totalGuests = guests.length;
+        const confirmed   = guests.filter(g => g.rsvp_status === 'yes').length;
+        const declined    = guests.filter(g => g.rsvp_status === 'no').length;
+        const maybe       = guests.filter(g => g.rsvp_status === 'maybe').length;
+        const pct         = (typeof maxGuests !== 'undefined' && maxGuests > 0)
+                              ? Math.min((totalGuests / maxGuests) * 100, 100)
+                              : 0;
       %>
 
       <div class="rsvp-summary">
-        <p>Total Guests: <%= totalGuests %></p>
-        <p>Confirmed (Yes): <%= confirmed %></p>
-        <p>Declined (No): <%= declined %></p>
-        <p>Maybe: <%= maybe %></p>
+        <p>🧑‍🤝‍🧑 Total Guests: <%= totalGuests %></p>
+        <p>✅ Confirmed: <%= confirmed %></p>
+        <p>❌ Declined: <%= declined %></p>
+        <p>🤔 Maybe: <%= maybe %></p>
+        <% if (typeof maxGuests !== 'undefined') { %>
+          <p>🎯 Guest Limit: <%= maxGuests %></p>
+          <!-- Guest Progress Bar -->
+          <div class="guest-progress" style="margin:8px 0; background:#eee; border-radius:4px; overflow:hidden;">
+            <div class="progress-bar" style="width:<%= pct %>%; height:8px; background:#8CA88F;"></div>
+          </div>
+          <% if (totalGuests > maxGuests) { %>
+            <p class="over-limit">❗️ Over limit by <%= totalGuests - maxGuests %> guests!</p>
+          <% } else { %>
+            <p>🎟️ <%= maxGuests - totalGuests %> slots remaining</p>
+          <% } %>
+        <% } %>
       </div>
 
       <!-- Add Guest Form -->
-      <form action="/guests/<%= eventId %>/add" method="POST">
-        <label for="guest_name">Guest Name:</label>
-        <input type="text" id="guest_name" name="guest_name" required>
+      <% if (typeof maxGuests === 'undefined' || totalGuests < maxGuests) { %>
+        <div class="guest-form">
+          <form action="/guests/<%= eventId %>/add" method="POST">
+            <label for="guest_name">Name:</label>
+            <input type="text" id="guest_name" name="guest_name" required />
 
-        <label for="guest_email">Guest Email:</label>
-        <input type="email" id="guest_email" name="guest_email" required>
+            <label for="guest_email">Email:</label>
+            <input type="email" id="guest_email" name="guest_email" required />
 
-        <label for="rsvp_status">RSVP Status:</label>
-        <select id="rsvp_status" name="rsvp_status">
-          <option value="maybe" selected>Maybe</option>
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
-        </select>
+            <label for="rsvp_status">RSVP:</label>
+            <select id="rsvp_status" name="rsvp_status">
+              <option value="yes">✅ Yes</option>
+              <option value="no">❌ No</option>
+              <option value="maybe">🤔 Maybe</option>
+            </select>
 
-        <button type="submit">Add Guest</button>
-      </form>
+            <button type="submit" class="primary-btn">Add Guest</button>
+          </form>
+        </div>
+      <% } else { %>
+        <p class="limit-full">Guest list is full. You have reached the maximum of <%= maxGuests %> guests.</p>
+      <% } %>
 
-      <!-- Guest List -->
-      <h2>Guest List</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>RSVP</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if (guests.length > 0) { %>
-            <% guests.forEach(guest => { %>
-              <tr>
-                <td><%= guest.guest_name %></td>
-                <td><%= guest.guest_email %></td>
-                <td><%= guest.rsvp_status %></td>
-                <td>
-                  <a href="/guests/<%= eventId %>/edit/<%= guest.guest_id %>">Edit</a> |
-                  <form action="/guests/<%= eventId %>/delete/<%= guest.guest_id %>" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
-                  </form>
-                </td>
-              </tr>
-            <% }) %>
-          <% } else { %>
+      <!-- Guest List Table -->
+      <h2>Guests</h2>
+      <div class="guest-table">
+        <table>
+          <thead>
             <tr>
-              <td colspan="4">No guests added yet.</td>
+              <th>Name</th>
+              <th>Email</th>
+              <th>RSVP</th>
+              <th>Actions</th>
             </tr>
-          <% } %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% if (guests.length) { %>
+              <% guests.forEach(g => { %>
+                <tr>
+                  <td><%= g.guest_name %></td>
+                  <td><%= g.guest_email %></td>
+                  <td><%= { yes: '✅', no: '❌', maybe: '🤔' }[g.rsvp_status] %> <%= g.rsvp_status %></td>
+                  <td class="actions">
+                    <a href="/guests/<%= eventId %>/edit/<%= g.guest_id %>">Edit</a> |
+                    <form action="/guests/<%= eventId %>/delete/<%= g.guest_id %>" method="POST" style="display:inline;">
+                      <button type="submit" onclick="return confirm('Delete this guest?')">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr>
+                <td colspan="4">No guests added yet.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
     </div>
-
   </div>
 </body>
 </html>

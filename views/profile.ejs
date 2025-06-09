@@ -3,62 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <title>Your Profile | PlanIt</title>
-  <link rel="stylesheet" href="/user.css" />
   <link rel="stylesheet" href="/main.css" />
-
+  <link rel="stylesheet" href="/user.css" />
 </head>
 <body>
-
-  <header class="top-nav">
-    <div class="nav-buttons">
-      <% if (user) { %>
-        <a href="/users/profile" class="nav-btn">Profile</a>
-        <a href="/users/logout" class="nav-btn">Logout</a>
-      <% } else { %>
-        <a href="/users/register" class="nav-btn">Register</a>
-        <a href="/users/login" class="nav-btn">Log In</a>
-      <% } %>
-      <a href="/help" class="nav-btn">Help</a>
-    </div>
-  </header>
-
   <div class="auth-container">
     <div class="auth-box">
-      <h1 class="logo">Plan<span>It</span></h1>
+      <a href="/">
+        <img src="/images/PlanIt.png" alt="PlanIt logo" class="logo" />
+      </a>
       <p class="subtitle">Your Profile</p>
 
       <!-- Update Profile Form -->
-      <form class="profile-form" action="/users/update-profile" method="POST">
-        <div class="form-line">
-          <label>First Name</label>
-          <input type="text" name="first_name" value="<%= user.firstName %>" required />
-        </div>
-        <div class="form-line">
-          <label>Last Name</label>
-          <input type="text" name="last_name" value="<%= user.lastName %>" required />
-        </div>
-        <div class="form-line">
-          <label>Username</label>
-          <input type="text" name="username" value="<%= user.username %>" required />
-        </div>
-        <div class="form-line">
-          <label>Email</label>
-          <input type="email" name="email" value="<%= user.email %>" required />
-        </div>
+      <form class="register-form" action="/users/update-profile" method="POST">
+        <label for="first_name" class="form-label">First Name</label>
+        <input type="text" id="first_name" name="first_name" value="<%= user.firstName %>" required />
 
-        <div class="actions" style="margin-top: 20px;">
-          <button type="submit" class="button primary">Save Changes</button>
-          <a href="/landing" class="button secondary">Back to Events</a>
-        </div>
+        <label for="last_name" class="form-label">Last Name</label>
+        <input type="text" id="last_name" name="last_name" value="<%= user.lastName %>" required />
+
+        <label for="username" class="form-label">Username</label>
+        <input type="text" id="username" name="username" value="<%= user.username %>" required />
+
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" name="email" value="<%= user.email %>" required />
+
+        <button type="submit" class="primary-btn" style="margin-top: 20px;">Save Changes</button>
       </form>
 
-      <!-- Separate Delete Form -->
-      <div style="margin-top: 40px;">
-        <p style="color: #900; font-size: 14px;">Want to delete your account?</p>
+      <!-- Delete Account -->
+      <div style="margin-top: 32px; text-align: center;">
+        <p style="color: #900; font-size: 14px; margin-bottom: 8px;">Want to delete your account?</p>
         <form action="/users/delete-account" method="POST">
-          <button type="submit" class="button danger">Delete My Account</button>
+          <button type="submit" class="danger-btn">Delete My Account</button>
         </form>
       </div>
+
+      <p class="alt-link"><a href="/landing">← Back to My Events</a></p>
     </div>
   </div>
 </body>

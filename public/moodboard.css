@@ -1,69 +1,90 @@
 /* ========== MOODBOARD PAGE-SPECIFIC STYLES ========== */
 
 .main-content {
-    flex: 1;
-    padding: 50px 70px;
-    background-color: #F9F9F9;
-  }
-  
-  .main-content h1 {
-    font-size: 2.4rem;
-    font-weight: 600;
-    margin-bottom: 30px;
-  }
-  
+  flex: 1;
+  padding: 50px 70px;
+  background-color: #F9F9F9;
+}
 
+.main-content h1 {
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+/* Pinterest-style moodboard */
+.moodboard-gallery {
+  column-count: 3;
+  column-gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.moodboard-item {
+  break-inside: avoid;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.moodboard-item img {
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  display: block;
+}
+
+/* Upload Button (floating style) */
+.upload-btn {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.upload-btn:hover {
+  background-color: #45a049;
+}
+
+/* Edit/Delete toggle */
+.delete-btn {
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.edit-mode .delete-btn {
+  display: block;
+}
+
+/* Responsive columns */
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 30px;
+  }
   .moodboard-gallery {
-    column-count: 3;
-    column-gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+    column-count: 2;
   }
-  
-  .moodboard-item {
-    break-inside: avoid;
-    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 20px;
   }
-  
-  .moodboard-item img {
-    width: 100%;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px var(--shadow-color);
-    display: block;
+  .moodboard-gallery {
+    column-count: 1;
   }
-  
-  #uploadButton {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: var(--accent-color);
-    color: var(--background-color);
-    padding: 12px 20px;
-    border: none;
-    border-radius: 50%;
-    font-size: 1.8rem;
-    cursor: pointer;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-    transition: background-color 0.3s ease;
-  }
-  
-  #uploadButton:hover {
-    background-color: #91bfd9;
-  }
-  
-  @media (max-width: 1024px) {
-    .main-content {
-      padding: 30px;
-    }
-    .moodboard-gallery {
-      column-count: 2;
-    }
-  }
-  @media (max-width: 768px) {
-    .main-content {
-      padding: 20px;
-    }
-    .moodboard-gallery {
-      column-count: 1;
-    }
-  }
+}

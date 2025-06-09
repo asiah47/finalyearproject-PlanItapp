@@ -16,6 +16,9 @@ app.set('view engine', 'ejs')
 // Set up the body parser 
 app.use(express.urlencoded({ extended: true }))
 
+// JSON bodies - needed for for the drag and drop order saving
+app.use(express.json());
+
 // Set up public folder (for css and static js)
 app.use(express.static(__dirname + '/public'))
 

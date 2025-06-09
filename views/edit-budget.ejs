@@ -3,31 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Budget Item</title>
+  <title>Edit Budget Item – <%= budget.category_name %></title>
   <link rel="stylesheet" href="/main.css">
   <link rel="stylesheet" href="/budget.css">
 </head>
 <body>
   <div class="dashboard-container">
-
     <!-- Sidebar -->
     <%- include('partials/sidebar', { eventId: eventId }) %>
-    
+
     <!-- Main Content -->
     <div class="main-content">
-      <h1>Edit Budget Item: <%= budget.category_name %></h1>
+      <h1>Edit Budget Item for Event: <%= eventId %></h1>
 
-      <form action="/budget/<%= eventId %>/edit/<%= budget.budget_id %>" method="POST">
-        <label for="allocated_amount">Allocated Amount (£):</label>
-        <input type="number" step="0.01" name="allocated_amount" id="allocated_amount" value="<%= budget.allocated_amount %>" required>
+      <!-- Form Card -->
+      <div class="task-form-wrapper">
+        <form action="/budget/<%= eventId %>/edit/<%= budget.budget_id %>" method="POST">
+          <label for="allocated_amount">Allocated Amount (£):</label>
+          <input 
+            type="number" 
+            step="0.01" 
+            id="allocated_amount" 
+            name="allocated_amount" 
+            value="<%= budget.allocated_amount %>" 
+            required
+          >
 
-        <label for="actual_amount">Actual Amount (£):</label>
-        <input type="number" step="0.01" name="actual_amount" id="actual_amount" value="<%= budget.actual_amount || '' %>">
+          <label for="actual_amount">Actual Amount (£):</label>
+          <input 
+            type="number" 
+            step="0.01" 
+            id="actual_amount" 
+            name="actual_amount" 
+            value="<%= budget.actual_amount || '' %>"
+          >
 
-        <button type="submit">Save Changes</button>
-      </form>
+          <button type="submit">Save Changes</button>
+        </form>
+      </div>
+
+      <!-- Back Link -->
+      <p><a href="/budget/<%= eventId %>">&larr; Back to Budget Overview</a></p>
     </div>
-
   </div>
 </body>
 </html>

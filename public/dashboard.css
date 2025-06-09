@@ -6,34 +6,56 @@
   background-color: #F9F9F9;
 }
 
-.main-content h1 {
-  font-size: 2.6rem;
-  font-weight: 600;
-  margin-bottom: 15px;
+.main-content > .top-bar {
+  display: none;
 }
 
-/* Top Section */
-.top-row {
-  margin-bottom: 40px;
+/* Dashboard Header */
+.dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
 }
 
-.status-bar {
+.dashboard-title h1 {
+  font-size: 2.6rem;
   font-weight: 600;
-  color: var(--accent-color);
-  font-size: 1rem;
-  background-color: rgba(230, 57, 70, 0.08);
-  padding: 8px 14px;
-  border-radius: 20px;
-  display: inline-block;
+  margin: 0;
 }
 
-.countdown {
-  font-size: 1.1rem;
+.status-chip {
+  display: inline-block;
+  margin-top: 6px;
+  background-color: rgba(230,57,70,0.1);
+  color: var(--accent-color);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
   font-weight: 500;
+}
+
+.header-actions {
+  text-align: right;
+  font-size: 0.9rem;
   color: var(--text-color);
+}
+
+.header-actions .user-links a {
+  color: var(--accent-color);
+  text-decoration: none;
+  margin: 0 4px;
+}
+
+.header-actions .user-links a:hover {
+  text-decoration: underline;
+}
+
+.header-actions .event-info p {
+  margin: 4px 0;
+  font-weight: 500;
 }
 
 /* Grid Layout */
@@ -51,7 +73,7 @@
   gap: 30px;
 }
 
-/* Cards */
+/* Generic Card Styles */
 .card {
   background-color: var(--background-color);
   border-radius: 20px;
@@ -84,7 +106,39 @@
   color: #444;
 }
 
-/* Task & Checklist Items */
+.card a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+/* Event Details Card */
+.event-details {
+  grid-column: span 2;
+  padding: 20px;
+  margin-bottom: 30px;  
+}
+
+.event-details .map-container {
+  margin-top: 10px;
+  height: 200px;
+  overflow: hidden;
+}
+
+.event-details .map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 8px;
+}
+
+/* Tasks & Checklist Preview Items */
 .task-item,
 .checklist-item {
   display: flex;
@@ -168,22 +222,77 @@
   border: 2px solid white;
 }
 
-/* Milestones */
-.milestone-item {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 8px;
-  padding: 6px 10px;
-  border-left: 4px solid var(--accent-color);
-  background-color: rgba(230, 57, 70, 0.03);
-  border-radius: 8px;
+/* Guest Summary Styles */
+.guest-status {
+  margin-right: 10px;
+  font-size: 0.9rem;
 }
 
-.milestone-date {
-  font-weight: 600;
-  color: var(--accent-color);
-  min-width: 60px;
+.guest-status.confirmed {
+  color: #155724;
+}
+
+.guest-status.declined {
+  color: #721c24;
+}
+
+.guest-status.maybe {
+  color: #856404;
+}
+
+.guest-list-preview {
+  margin: 8px 0 12px;
+  padding-left: 20px;
+  font-size: 0.9rem;
+}
+
+/* Checklist Card */
+.checklist-card .checklist-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px;
+}
+
+.checklist-card .checklist-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.checklist-card .checklist-list input {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+}
+
+.checklist-card .checklist-list label {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Deadlines Card */
+.deadlines-card .deadline-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px;
+}
+
+.deadlines-card .deadline-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.deadlines-card .deadline-name {
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.deadlines-card .deadline-date {
+  font-size: 0.85rem;
+  color: #888;
 }
 
 /* Responsive */
@@ -191,7 +300,6 @@
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
-
   .main-content {
     padding: 30px;
   }

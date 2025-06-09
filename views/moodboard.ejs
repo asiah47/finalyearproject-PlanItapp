@@ -1,60 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moodboard</title>
-    <link rel="stylesheet" href="/main.css">
-    <link rel="stylesheet" href="/moodboard.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moodboard</title>
+  <link rel="stylesheet" href="/main.css">
+  <link rel="stylesheet" href="/moodboard.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 </head>
 <body>
   <div class="dashboard-container">
-
-    <!-- Sidebar -->
+    <!-- Sidebar navigation -->
     <%- include('partials/sidebar', { eventId: eventId }) %>
 
-    <!-- Main Content -->
+    <!-- Moodboard Main Area -->
     <div class="main-content">
-      <h1>Moodboard / Theme Ideas </h1>
+      <h1>Moodboard / Theme Ideas</h1>
 
-      <!-- Floating Upload Button -->
+      <!-- Edit and Upload Controls -->
+      <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <button id="editToggle">Edit Moodboard</button>
+        <label for="imageInput" class="upload-btn">+ Add Image</label>
+      </div>
+
+      <!-- Upload Form (hidden input) -->
       <form action="/moodboard/<%= eventId %>/upload" method="POST" enctype="multipart/form-data" id="uploadForm">
         <input type="file" name="theme_image" id="imageInput" accept="image/*" hidden>
-        <button type="button" id="uploadButton">+ Upload Image</button>
       </form>
 
-      <!-- Moodboard Gallery -->
+      <!-- Moodboard Images Gallery -->
       <div id="moodboard" class="moodboard-gallery">
         <% themes.forEach(theme => { %>
           <% if (theme.theme_image) { %>
-            <div class="moodboard-item">
+            <div class="moodboard-item" data-id="<%= theme.theme_id %>">
+              <button class="delete-btn" data-id="<%= theme.theme_id %>">&times;</button>
               <img src="/uploads/moodboard/<%= theme.theme_image %>" alt="Moodboard Image">
             </div>
           <% } %>
         <% }) %>
       </div>
     </div>
-
   </div>
 
+  <!-- JavaScript for interactivity -->
   <script>
-
-    // Button
-    const uploadButton = document.getElementById('uploadButton');
     const imageInput = document.getElementById('imageInput');
-
-    uploadButton.addEventListener('click', () => {
-      imageInput.click();
-    });
+    const container = document.getElementById('moodboard');
 
     imageInput.addEventListener('change', () => {
       document.getElementById('uploadForm').submit();
     });
 
-    // SortableJS - DRAG AND DROP 
-    new Sortable(document.getElementById('moodboard'), {
-      animation: 150
+    // Enable drag-and-drop sorting
+    new Sortable(container, {
+      animation: 150,
+      onEnd: () => {
+        const order = Array.from(container.children).map(el => el.dataset.id);
+
+        fetch(`/moodboard/reorder/<%= eventId %>`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order })
+        });
+      }
+    });
+
+    // Toggle edit mode
+    document.getElementById('editToggle').addEventListener('click', () => {
+      container.classList.toggle('edit-mode');
+    });
+
+    // Delete image in edit mode
+    container.addEventListener('click', (e) => {
+      if (e.target.classList.contains('delete-btn')) {
+        const id = e.target.dataset.id;
+        fetch(`/moodboard/<%= eventId %>/delete/${id}`, {
+          method: 'POST'
+        }).then(() => {
+          e.target.parentElement.remove();
+        });
+      }
     });
   </script>
 </body>
